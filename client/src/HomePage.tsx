@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { ArrowDown, ArrowRight, Heart, Menu, Moon, Sun, X } from 'lucide-react'
 import SeriesAndFilms from './SeriesAndFilms'
 import { useLanguage } from './lib/i18n'
@@ -18,7 +18,7 @@ import { doc, getDoc } from 'firebase/firestore'
 type Theme = 'dark' | 'light'
 
 const pageMotion = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.11 } } }
-const sectionMotion = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: 'easeOut' } } }
+const sectionMotion: Variants = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: 'easeOut' } } }
 
 const PAGES = ['hakkimizda', 'anilarimiz', 'dizi-filmler', 'giris'] as const
 const ADMIN_SUBS = ['hakkimizda', 'anilarimiz', 'dizi-filmler'] as const
