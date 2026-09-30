@@ -1,0 +1,46 @@
+.watchlist-preview {
+  padding-top: clamp(40px, 6vw, 96px);
+  padding-bottom: clamp(70px, 8vw, 120px);
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.watch-preview-heading { margin-bottom: 44px; }
+.watch-preview-heading h2 {
+  margin: 0;
+  font-size: clamp(44px, 7vw, 92px);
+  font-weight: 500;
+  letter-spacing: -.075em;
+  line-height: 1;
+}
+.watch-preview-heading p { margin: 22px 0 0; font-size: clamp(14px, 1.3vw, 18px); line-height: 1.7; }
+.watch-preview-heading .text-link { width: max-content; flex-shrink: 0; }
+.watch-preview-list { border-top: 1px solid var(--line); }
+.watch-preview-link {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto 24px;
+  align-items: center;
+  gap: 28px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+.watch-preview-number, .watch-preview-kind, .watch-preview-status, .watch-preview-progress {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+.watch-preview-kind, .watch-preview-status { display: flex; align-items: center; gap: 8px; }
+.watch-preview-kind svg, .watch-preview-arrow, .watch-preview-status { color: var(--rose); }
+.watch-preview-content h3 { margin: 10px 0; font-size: clamp(24px, 3vw, 42px); font-weight: 500; letter-spacing: -.04em; overflow-wrap: anywhere; }
+.watch-preview-progress { margin: 0; }
+.watch-preview-link:hover h3 { color: var(--rose); }
+.watch-preview-link:focus-visible { outline: 2px solid var(--rose); outline-offset: 6px; }
+.watch-preview-message { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding: 36px 0; line-height: 1.7; }
+.watch-preview-message p { width: 100%; margin: 0; }
+
+@media (max-width: 760px) {
+  .watch-preview-link { grid-template-columns: 24px minmax(0, 1fr) 22px; gap: 14px; padding: 24px 0; }
+  .watch-preview-status { grid-column: 2; font-size: 10px; }
+  .watch-preview-arrow { grid-column: 3; grid-row: 1; }
+  .watch-preview-number, .watch-preview-kind, .watch-preview-progress { font-size: 10px; }
+}

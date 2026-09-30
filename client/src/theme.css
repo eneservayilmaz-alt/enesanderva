@@ -1,0 +1,121 @@
+:root{--ink:#0C0C0B;--paper:#F1EFE7;--rose:#D1867D;--line:rgba(241,239,231,.22);color-scheme:dark;background:var(--ink);color:var(--paper)}
+:root[data-theme="light"]{--ink:#F1EFE7;--paper:#0C0C0B;--rose:#D1867D;--line:rgba(12,12,11,.22);color-scheme:light}
+html,body,#root,.site-shell{min-height:100%;background:var(--ink);color:var(--paper)}
+body{transition:background-color .42s ease,color .42s ease}
+*,*::before,*::after{transition-property:background-color,border-color,color,box-shadow;transition-duration:.35s;transition-timing-function:ease}
+::selection{background:#D1867D;color:#0C0C0B}
+.site-header,.hero,.memories,.intro,.watchlist,.mobile-nav,.watchlist-add-form{background-color:var(--ink);color:var(--paper)}
+.site-header{border-bottom:0}
+.desktop-nav{gap:clamp(18px,2.4vw,36px)}
+.nav-link{color:color-mix(in srgb,var(--paper) 68%,transparent);font-size:14px}
+.nav-link.active,.nav-link:hover{color:var(--paper)}
+.nav-link.active:after{background:var(--rose)}
+.header-controls{flex-shrink:0}
+.header-control{width:43px;height:43px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--paper);font:11px var(--mono);transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+.header-control:hover{border-color:var(--rose);color:var(--rose)}
+.mobile-nav{z-index:5;border-color:var(--line)}
+.mobile-nav button{color:var(--paper)}
+.mobile-nav a{color:var(--paper);padding:14px 0;border-bottom:1px solid var(--line)}
+.hero-viewport{min-height:calc(100svh - 84px);padding-top:clamp(30px,5vh,58px);padding-bottom:clamp(30px,5vh,58px)}
+.hero-meta,.hero-note,.hero-bottom p,.hero-edge-label{color:color-mix(in srgb,var(--paper) 72%,transparent)}
+.hero-meta,.hero-note,.section-kicker,.stats-row span,.memory-caption,.memories-foot,.footer-top,.footer-bottom>span,.footer-bottom button,.watchlist-eyebrow,.sidebar-title,.sidebar-note>span,.watchlist-list-head,.watch-item-number,.watch-status{font-size:11px}
+.hero h1{color:var(--paper);font-size:clamp(76px,11.2vw,166px);line-height:.9;max-width:1280px}
+.hero-title-line{display:block}
+.hero h1 em,.intro h2 em,.footer>p em{color:var(--rose)}
+.hero-bottom p{font-size:17px;max-width:520px}
+.hero-edge-label{position:absolute;right:3.8%;top:50%;writing-mode:vertical-rl;font:10px var(--mono);letter-spacing:.18em;border-left:1px solid var(--line);padding-left:10px}
+.round-link{border-color:var(--line);color:var(--paper)}
+.round-link:hover{color:#0C0C0B}
+.hero-stamp{color:var(--rose);border-color:var(--rose)}
+.section-kicker{color:var(--paper)}
+.intro{background:var(--ink);color:var(--paper)}
+.intro-copy p{color:color-mix(in srgb,var(--paper) 75%,transparent);font-size:16px}
+.text-link{color:var(--paper);border-color:var(--line)}
+.text-link svg,.memory-caption svg{color:var(--rose)}
+.stats-row{border-color:var(--line)}
+.stats-row span{color:var(--paper)}
+.memories .section-kicker{color:color-mix(in srgb,var(--paper) 72%,transparent)}
+.memories-heading p{color:color-mix(in srgb,var(--paper) 68%,transparent);font-size:15px}
+.memory-caption,.memories-foot{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.memory-photo{color:#F1EFE7}
+.watchlist{background:var(--ink);color:var(--paper)}
+.add-watch-item{color:#0C0C0B}
+.watchlist>.section-kicker{color:color-mix(in srgb,var(--paper) 72%,transparent)}
+.watchlist-eyebrow,.sidebar-title,.sidebar-note>span,.watchlist-list-head,.watch-item-number,.watch-status{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.watchlist-sidebar,.watchlist-list-head,.watch-item-list,.watch-item,.sidebar-filter,.sidebar-note{border-color:var(--line)}
+.sidebar-filter{color:color-mix(in srgb,var(--paper) 72%,transparent)}
+.sidebar-filter:hover,.sidebar-filter.selected{color:var(--paper);background:transparent}
+.sidebar-note{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.sidebar-note p{color:var(--paper)}
+.watch-item-titleline h3,.watchlist-empty strong{color:var(--paper)}
+.watch-item-icon,.watchlist-empty>svg,.sidebar-heart{color:var(--rose)}
+.episode-controls label{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.episode-controls select,.watchlist-add-form>input{background:var(--ink);color:var(--paper);border-color:var(--line)}
+.progress-save{color:var(--rose);border-color:var(--rose)}
+.watched-toggle{border-color:var(--line);color:var(--paper)}
+.watched-toggle:hover,.watched-toggle.is-complete{border-color:var(--rose);color:var(--rose)}
+.watchlist-empty{color:color-mix(in srgb,var(--paper) 65%,transparent);border-color:var(--line)}
+.watchlist-error{border-color:var(--rose);color:var(--rose);background:transparent}
+.media-label,.media-kind-choice{color:color-mix(in srgb,var(--paper) 72%,transparent)}
+.footer{background:var(--paper);color:var(--ink)}
+.footer-top,.footer-bottom{border-color:color-mix(in srgb,var(--ink) 22%,transparent)}
+.footer-bottom button{color:var(--ink)}
+.wordmark-heart,.wordmark-dot,.accent{color:var(--rose)}
+.memory-cloudinary-image{transition:filter .35s ease}
+.hero-bottom{position:relative;width:100%}
+.hero-bottom>.round-link{position:absolute;left:50%;bottom:0;transform:translateX(-50%)}
+.hero-bottom>.round-link:hover{transform:translate(-50%,3px)}
+.memory-photo{color:var(--paper)}
+.archive-page,.about-page{min-height:calc(100svh - 84px);background:var(--ink);color:var(--paper)}
+.archive-heading{padding-top:clamp(80px,9vw,150px);padding-bottom:clamp(50px,6vw,90px)}
+.archive-heading h1,.about-page h1{font-size:clamp(54px,9vw,124px);font-weight:500;letter-spacing:-.08em;line-height:.96;margin:0}
+.archive-count{display:inline-flex;vertical-align:top;margin:9px 0 0 14px;color:var(--rose);font:11px var(--mono);letter-spacing:.1em}
+.memories-heading-actions{display:flex;align-items:flex-end;gap:30px}
+.memories-heading-actions .text-link{flex-shrink:0}
+.archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.archive-page .memory-card:nth-child(2),.archive-page .memory-card:nth-child(3){margin-top:0}
+.archive-page .memory-photo{height:clamp(240px,31vw,460px)}
+.archive-page .memory-card--large .memory-photo{height:clamp(290px,38vw,520px)}
+.archive-page .memory-caption{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.archive-page .memories-foot{color:color-mix(in srgb,var(--paper) 70%,transparent);border-color:var(--line)}
+.archive-empty{min-height:220px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;border:1px solid var(--line);color:color-mix(in srgb,var(--paper) 75%,transparent);font-size:14px;line-height:1.7}
+.home-memory-empty{min-height:160px}
+.about-page h1{padding:clamp(70px,12vh,150px) 0 50px}
+.about-page h1 em{font-family:var(--serif);font-weight:500;color:var(--rose)}
+.about-page-copy{max-width:600px;margin-left:auto;color:color-mix(in srgb,var(--paper) 75%,transparent);font-size:clamp(16px,1.6vw,21px);line-height:1.8}
+.about-page .stats-row{margin-top:70px}
+
+@media(max-width:1024px){
+  .hero-viewport{min-height:calc(100svh - 84px)}
+  .hero h1{font-size:clamp(68px,10.4vw,116px)}
+  .hero-meta,.hero-note,.section-kicker,.stats-row span,.memory-caption,.memories-foot,.footer-top,.footer-bottom>span,.footer-bottom button,.watchlist-eyebrow,.sidebar-title,.sidebar-note>span,.watchlist-list-head,.watch-item-number,.watch-status{font-size:10px}
+  .nav-link{font-size:13px}
+  .hero-bottom p{font-size:15px}
+  .intro-copy p{font-size:15px}
+  .memories-heading p{font-size:14px}
+}
+@media(max-width:760px){
+  .header-control{width:38px;height:38px}
+  .hero-viewport{min-height:calc(100svh - 70px);padding-top:28px;padding-bottom:34px}
+  .hero h1{font-size:clamp(58px,13.5vw,96px);line-height:.94;margin:62px 0 46px;letter-spacing:-.085em}
+  .hero-bottom>.round-link{bottom:0}
+  .memories-heading-actions{display:block}
+  .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .archive-page .memory-card:nth-child(2),.archive-page .memory-card:nth-child(3){margin-top:0}
+  .archive-page .memory-card:nth-child(2) .memory-photo,.archive-page .memory-card:nth-child(3) .memory-photo{height:clamp(205px,55vw,330px)}
+  .archive-page .memory-card--large .memory-photo{height:clamp(280px,78vw,440px)}
+  .archive-heading h1,.about-page h1{font-size:clamp(54px,12vw,84px)}
+  .archive-count{font-size:9px;margin-left:7px}
+  .about-page .stats-row{margin-top:38px}
+  .hero-meta,.hero-note,.section-kicker,.stats-row span,.memory-caption,.memories-foot,.footer-top,.footer-bottom>span,.footer-bottom button,.watchlist-eyebrow,.sidebar-title,.sidebar-note>span,.watchlist-list-head,.watch-item-number,.watch-status{font-size:9px}
+  .hero-meta span:last-child{max-width:43%;text-align:right}
+  .hero-bottom p{max-width:56%;font-size:13px;line-height:1.6}
+  .hero-note{max-width:35%;justify-content:flex-end;text-align:right}
+  .hero-edge-label{right:2%;font-size:8px}
+  .hero-stamp{top:34%;right:8%;width:66px;height:66px;font-size:7px}
+  .intro-copy p{font-size:14px}
+  .memories-heading p{font-size:13px}
+  .memory-caption{font-size:9px}
+  .footer>p{font-size:clamp(52px,11vw,88px)}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
