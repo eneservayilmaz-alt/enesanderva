@@ -7,6 +7,7 @@ import { getDataErrorKey } from './lib/dataErrors'
 import { MediaTable } from './features/watchlist/MediaTable'
 import { sortWatchlist, type WatchlistSort } from './features/watchlist/watchlistSort'
 import { WatchlistSortControl } from './features/watchlist/WatchlistSortControl'
+import { useRecordFocus } from './lib/useRecordFocus'
 
 const filters = [
   { id: 'all', label: 'Hepsi' },
@@ -22,6 +23,7 @@ function SeriesAndFilms() {
   const [sort, setSort] = useState<WatchlistSort>('title-asc')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  useRecordFocus(!loading && !error, 'watch-item-')
 
   useEffect(() => {
     let cancelled = false

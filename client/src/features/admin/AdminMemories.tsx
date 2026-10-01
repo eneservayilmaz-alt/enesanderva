@@ -8,6 +8,7 @@ import { getDataErrorKey } from '../../lib/dataErrors'
 import CloudinaryPhoto from '../../CloudinaryPhoto'
 import '../watchlist/media-table.css'
 import './admin-memory-table.css'
+import { navigateTo } from '../../lib/auth'
 
 type Memory = { id: string; title: string; date: string; note: string; imageUrl: string; publicId: string; createdAt: string }
 type MemoryFields = { title: string; date: string; note: string; imageUrl: string; publicId: string }
@@ -122,10 +123,10 @@ export function AdminMemories() {
         <div className="media-table-header media-table-grid" role="row"><span role="columnheader">{t('mediaNameImage')}</span><span role="columnheader">{t('adminMemoryDate')}</span><span role="columnheader">{t('actions')}</span></div>
         {memories.map((memory) => (
           <div className="media-table-row media-table-grid" role="row" key={memory.id}>
-            <div className="media-title-cell" role="cell" data-label={t('mediaNameImage')}><div className="media-cell-value media-title-content">
+            <div className="media-title-cell" role="cell" data-label={t('mediaNameImage')}><a className="media-cell-value media-title-content admin-record-link" href={`/anilarimiz?focus=${encodeURIComponent(memory.id)}`} onClick={event => { event.preventDefault(); navigateTo(`/anilarimiz?focus=${encodeURIComponent(memory.id)}`) }}>
               {memory.publicId ? <CloudinaryPhoto publicId={memory.publicId} alt={memory.title} width={160} height={160} /> : memory.imageUrl ? <img src={memory.imageUrl} alt={memory.title} loading="lazy" /> : <span className="admin-memory-no-image"><ImagePlus size={20} /></span>}
               <div><h3>{memory.title}</h3></div>
-            </div></div>
+            </a></div>
             <div role="cell" data-label={t('adminMemoryDate')}><div className="media-cell-value admin-memory-date">{memory.date || '—'}</div></div>
             <div className="media-actions-cell" role="cell" data-label={t('actions')}><div className="media-cell-value admin-row-actions"><button className="admin-edit-btn" aria-label={`${t('edit')}: ${memory.title}`} onClick={() => openEdit(memory)}><Pencil size={14} /></button><button className="admin-delete-btn" aria-label={`${t('delete')}: ${memory.title}`} onClick={() => setDeleting(memory)}><Trash2 size={14} /></button></div></div>
           </div>

@@ -28,7 +28,7 @@ export function MemoryCard({ memory, index, linkToArchive = false, onOpen }: Mem
     <div className="memory-caption"><span>{memory.date}</span><ArrowUpRight size={15} /></div>
   </>
 
-  return <article className={`memory-card ${index === 0 ? 'memory-card--large' : ''}`}>
+  return <article className={`memory-card record-focus ${index === 0 ? 'memory-card--large' : ''}`} id={`memory-${memory.id}`} tabIndex={-1}>
     {onOpen ? <button className="memory-card-button" onClick={onOpen} aria-label={`${memory.title} — ${memory.date}`}>{content}</button> : linkToArchive ? <a className="memory-card-link" href="/anilarimiz" onClick={(e) => { e.preventDefault(); navigateTo('/anilarimiz') }} aria-label={`${memory.title} — Biriktirdiklerimiz`}>{content}</a> : content}
   </article>
 }

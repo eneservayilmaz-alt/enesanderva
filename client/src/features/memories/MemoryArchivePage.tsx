@@ -5,6 +5,7 @@ import { getDataErrorKey } from '../../lib/dataErrors'
 import { MemoryCard } from './MemoryCard'
 import type { Memory } from './memoryService'
 import { MemoryLightbox } from './MemoryLightbox'
+import { useRecordFocus } from '../../lib/useRecordFocus'
 
 type MemoryArchivePageProps = {
   memories: Memory[]
@@ -16,6 +17,7 @@ type MemoryArchivePageProps = {
 export function MemoryArchivePage({ memories, loading, error, count }: MemoryArchivePageProps) {
   const { t } = useLanguage()
   const [selected, setSelected] = useState<Memory | null>(null)
+  useRecordFocus(!loading && !error, 'memory-')
 
   return <section className="archive-page section-pad">
     <div className="memories-heading archive-heading">
