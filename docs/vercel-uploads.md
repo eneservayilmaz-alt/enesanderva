@@ -11,6 +11,6 @@ Vercel → Project Settings → Environment Variables kısmında Production (ve 
 
 Değerler mevcut Cloudinary/Firebase projesinden alınmalıdır. Bu dosyaya veya Git'e gizli değer yazmayın. Ardından Redeploy yapın; yalnızca yerel dosya değişikliği canlı servisi güncellemez.
 
-İstek Firebase oturum token'ıyla yapılır. Firebase token'ı aynı proje için doğrular; yalnızca `enes@erva.com` imza alabilir. Servis hesabı gerekmez. Eksik oturum 401, başka hesap 403, eksik yapılandırma 503 JSON döndürür. İmza Cloudinary'ye gönderilir; fotoğraf başarıyla yüklenince admin formuna URL/publicId yazılır. Firestore kaydı ayrıca memories admin yazma izni gerektirir.
+İstek Firebase oturum token'ıyla yapılır. Firebase token'ı aynı proje için doğrular; yalnızca `eneservanur@admin.com` imza alabilir. Servis hesabı gerekmez. Eksik oturum 401, başka hesap 403, eksik yapılandırma 503 JSON döndürür. İmza Cloudinary'ye gönderilir; fotoğraf başarıyla yüklenince admin formuna URL/publicId yazılır. Firestore kaydı ayrıca memories admin yazma izni gerektirir.
 
 Kaynaklar: [Vercel Node Functions](https://vercel.com/docs/functions/runtimes/node-js), [Cloudinary upload signatures](https://cloudinary.com/documentation/upload_images#generating_authentication_signatures).

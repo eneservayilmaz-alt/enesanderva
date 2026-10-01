@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isMemoryAdmin() {
       return request.auth != null
-        && request.auth.token.email == 'enes@erva.com';
+        && request.auth.token.email == 'eneservanur@admin.com';
     }
     match /memories/{memoryId} {
       function validMemory() {
@@ -28,7 +28,7 @@ service cloud.firestore {
     match /watchlist/{itemId} {
       function isWatchlistAdmin() {
         return request.auth != null
-          && request.auth.token.email == 'enes@erva.com';
+          && request.auth.token.email == 'eneservanur@admin.com';
       }
       function validItem() {
         let item = request.resource.data;

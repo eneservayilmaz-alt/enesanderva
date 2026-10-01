@@ -14,7 +14,7 @@ export default async function uploadSignature(request, response) {
     const authResponse = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(apiKey)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken: token }), signal: AbortSignal.timeout(10000) })
     if (!authResponse.ok) return response.status(401).json({ error: 'Admin oturumu geçersiz. Yeniden giriş yapın.' })
     const { users } = await authResponse.json()
-    if (users?.[0]?.email !== 'enes@erva.com') return response.status(403).json({ error: 'Bu işlem için admin izni gerekli.' })
+    if (users?.[0]?.email !== 'eneservanur@admin.com') return response.status(403).json({ error: 'Bu işlem için admin izni gerekli.' })
     const timestamp = Math.floor(Date.now() / 1000)
     const folder = 'bizim-anilarimiz'
     const signature = createHash('sha1').update(`folder=${folder}&timestamp=${timestamp}${secret}`).digest('hex')

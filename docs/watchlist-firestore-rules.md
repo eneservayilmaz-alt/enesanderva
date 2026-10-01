@@ -2,7 +2,7 @@
 
 Fotoğraf ekleme/düzenleme isteği artık memories için admin yazma izni gerektiriyor. Önceki `allow write: if false` kuralı bu işlemi engelliyordu. Canlı kurallar okunmadığı için mevcut sunucu durumu doğrulanmadı.
 
-Firebase Console → Firestore Database → Rules bölümünde **tam dosyayı** kullanın. Kural yalnızca `enes@erva.com` hesabına yazma izni verir. watchlist kuralları korunmuştur. Başka koleksiyon kurallarınız varsa onları da koruyun. Yerel dosyayı değiştirmek kuralları Firebase’e yayımlamaz.
+Firebase Console → Firestore Database → Rules bölümünde **tam dosyayı** kullanın. Kural yalnızca `eneservanur@admin.com` hesabına yazma izni verir. watchlist kuralları korunmuştur. Başka koleksiyon kurallarınız varsa onları da koruyun. Yerel dosyayı değiştirmek kuralları Firebase’e yayımlamaz.
 
 ```javascript
 rules_version = '2';
@@ -11,7 +11,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function isMemoryAdmin() {
       return request.auth != null
-        && request.auth.token.email == 'enes@erva.com';
+        && request.auth.token.email == 'eneservanur@admin.com';
     }
     match /memories/{memoryId} {
       function validMemory() {
@@ -35,7 +35,7 @@ service cloud.firestore {
     match /watchlist/{itemId} {
       function isWatchlistAdmin() {
         return request.auth != null
-          && request.auth.token.email == 'enes@erva.com';
+          && request.auth.token.email == 'eneservanur@admin.com';
       }
       function validItem() {
         let item = request.resource.data;
