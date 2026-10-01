@@ -1,5 +1,6 @@
 import { collection, getDocs, orderBy, query, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
+import { sortWatchlist } from './watchlistSort'
 
 export type Kind = 'series' | 'movie' | 'anime'
 export type Status = 'planned' | 'watching' | 'completed'
@@ -21,7 +22,7 @@ export async function getWatchlist(signal?: AbortSignal): Promise<WatchItem[]> {
   signal?.throwIfAborted()
   const snapshot = await getDocs(query(collection(db, 'watchlist'), orderBy('createdAt', 'desc')))
   signal?.throwIfAborted()
-  return snapshot.docs.map((entry) => ({ ...entry.data(), id: entry.id } as WatchItem))
+  return sortWatchlist(snapshot.docs.map((entry) => ({ ...entry.data(), id: entry.id } as WatchItem)))
 }
 
 export async function updateWatchItem(id: string, changes: Partial<WatchItem>) {

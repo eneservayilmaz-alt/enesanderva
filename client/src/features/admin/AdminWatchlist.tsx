@@ -7,6 +7,7 @@ import { getDataErrorKey } from '../../lib/dataErrors'
 import { getWatchlist, type Kind, type WatchItem } from '../watchlist/watchlistService'
 import { StarRating } from '../watchlist/StarRating'
 import { ImageSearch } from '../watchlist/ImageSearch'
+import { sortWatchlist } from '../watchlist/watchlistSort'
 
 const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervaRating: 0, imageUrl: '' }
 export function AdminWatchlist() {
@@ -99,7 +100,7 @@ export function AdminWatchlist() {
     {error && !editorOpen && !deleting && <p className="admin-form-error" role="alert">{error}</p>}
     {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> : items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> : <div className="admin-table">
       <div className="admin-table-head"><span>#</span><span>{t('titleLabel')}</span><span>{t('adminType')}</span><span>{t('adminStatus')}</span><span /></div>
-      {items.map((item, index) => <div className="admin-table-row" key={item.id}>
+      {sortWatchlist(items).map((item, index) => <div className="admin-table-row" key={item.id}>
         <span className="admin-row-num">{String(index + 1).padStart(2, '0')}</span>
         <div className="admin-row-title">{item.title}<StarRating name={t('enesRating')} value={item.enesRating} /><StarRating name={t('ervaRating')} value={item.ervaRating} /></div>
         <span className="admin-row-kind">{t(item.kind === 'anime' ? 'anime' : item.kind === 'series' ? 'seriesOne' : 'movie')}</span>

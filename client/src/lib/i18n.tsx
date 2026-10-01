@@ -4,7 +4,9 @@ export type Language = 'tr' | 'en'
 
 const copy = {
   tr: {
-    anime: 'Anime', enesRating: "Enes’in Puanı", ervaRating: "Erva’nın Puanı", unrated: 'Puan verilmedi',
+    anime: 'Animeler', enesRating: "Enes’in Puanı", ervaRating: "Erva’nın Puanı", unrated: 'Puan verilmedi',
+    sortBy: 'Sıralama', sortTitleAsc: 'A’dan Z’ye', sortTitleDesc: 'Z’den A’ya',
+    sortEnesDesc: 'Enes’in puanı: yüksekten düşüğe', sortErvaDesc: 'Erva’nın puanı: yüksekten düşüğe',
     imageSearch: 'Görsel ara', imageSearchPlaceholder: 'Örn. Predestination film',
     imageSearchSource: 'Wikipedia görselleri · Bir görsel seçin; yalnızca internet adresi kaydedilir.',
     imageSearchError: 'Görsel aramasına ulaşılamadı. Yeniden deneyin veya görsel adresi yapıştırın.',
@@ -27,6 +29,8 @@ const copy = {
   },
   en: {
     anime: 'Anime', enesRating: "Enes’s rating", ervaRating: "Erva’s rating", unrated: 'Not rated',
+    sortBy: 'Sort by', sortTitleAsc: 'A to Z', sortTitleDesc: 'Z to A',
+    sortEnesDesc: 'Enes’s rating: high to low', sortErvaDesc: 'Erva’s rating: high to low',
     imageSearch: 'Search images', imageSearchPlaceholder: 'e.g. Predestination film',
     imageSearchSource: 'Wikipedia images · Select an image; only its internet URL is saved.',
     imageSearchError: 'Image search is unavailable. Retry or paste an image URL.',
