@@ -8,7 +8,7 @@ export function WatchlistSortControl({ value, onChange }: { value: WatchlistSort
     <option value="title-desc">{t('sortTitleDesc')}</option>
     <option value="enes-desc">{t('sortEnesDesc')}</option>
     <option value="enes-asc">{t('sortEnesAsc')}</option>
-    <option value="erva-desc">{t('sortErvaDesc')}</option>
-    <option value="erva-asc">{t('sortErvaAsc')}</option>
+    <option value="ervanur-desc">{t('sortErvaDesc')}</option>
+    <option value="ervanur-asc">{t('sortErvaAsc')}</option>
   </select></label>
 }
