@@ -39,9 +39,6 @@ export function WatchlistPreview() {
           <h2 id="watchlist-preview-title">{t('mediaTitle')}<span className="accent">.</span></h2>
           <p>{t('eveningsCopy')}</p>
         </div>
-        <a className="text-link" href={DETAIL_URL} onClick={(e) => { e.preventDefault(); navigateTo(DETAIL_URL) }}>
-          {t('allMedia')} <ArrowUpRight size={18} aria-hidden="true" />
-        </a>
       </div>
 
       {loading ? (
@@ -56,12 +53,15 @@ export function WatchlistPreview() {
             <a className="watch-preview-link" href={DETAIL_URL} onClick={(e) => { e.preventDefault(); navigateTo(DETAIL_URL) }} key={item.id}>
               <span className="watch-preview-number">{String(index + 1).padStart(2, '0')}</span>
               <div className="watch-preview-content">
+                {item.imageUrl && <img className="watch-preview-poster" src={item.imageUrl} alt={item.title} loading="lazy" referrerPolicy="no-referrer" />}
+                <div className="watch-preview-text">
                 <span className="watch-preview-kind">
                   {item.kind === 'series' ? <Tv size={16} aria-hidden="true" /> : <Film size={16} aria-hidden="true" />}
                   {item.kind === 'anime' ? t('anime') : item.kind === 'series' ? t('seriesOne') : t('movie')}
                 </span>
                 <h3>{item.title}</h3>
                 {item.kind !== 'movie' && <p className="watch-preview-progress">{t('season')} {item.season || 1} · {t('episode')} {item.episode || 1}</p>}
+                </div>
               </div>
               <span className="watch-preview-status">
                 {item.status === 'completed' && <Check size={14} aria-hidden="true" />}

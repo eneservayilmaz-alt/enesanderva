@@ -59,6 +59,7 @@ export function AdminWatchlist() {
   const save = async (event: FormEvent) => {
     event.preventDefault()
     if (saving || !fields.title.trim()) return
+    if (fields.kind !== 'movie' && (!Number.isInteger(fields.season) || fields.season < 1 || !Number.isInteger(fields.episode) || fields.episode < 1)) { setError(t('invalidProgress')); return }
     if (fields.imageUrl && !/^https?:\/\//i.test(fields.imageUrl.trim())) { setError(t('invalidImageUrl')); return }
     setSaving(true); setError('')
     const values = { ...fields, title: fields.title.trim(), imageUrl: fields.imageUrl.trim(), season: fields.kind !== 'movie' ? fields.season : null, episode: fields.kind !== 'movie' ? fields.episode : null }
@@ -107,7 +108,7 @@ export function AdminWatchlist() {
       <form onSubmit={save}><fieldset disabled={saving} className="media-editor-fields">
         <label><span>{t('titleLabel')}</span><input required maxLength={100} value={fields.title} onChange={(event) => setFields({ ...fields, title: event.target.value })} placeholder={t('titlePlaceholder')} /></label>
         <div className="admin-form-row">{(['series', 'movie', 'anime'] as const).map((kind) => <label className="admin-radio" key={kind}><input type="radio" name="kind" checked={fields.kind === kind} onChange={() => setFields({ ...fields, kind })} /> {t(kind === 'series' ? 'seriesOne' : kind)}</label>)}</div>
-        {fields.kind !== 'movie' && <div className="media-editor-progress"><label><span>{t('season')}</span><input type="number" required min={1} step={1} value={fields.season} onChange={(event) => setFields({ ...fields, season: Number(event.target.value) })} /></label><label><span>{t('episode')}</span><input type="number" required min={1} step={1} value={fields.episode} onChange={(event) => setFields({ ...fields, episode: Number(event.target.value) })} /></label></div>}
+        {fields.kind !== 'movie' && <div className="media-editor-progress"><h3>{t('seasonEpisode')}</h3><label><span>{t('season')}</span><input type="number" inputMode="numeric" required min={1} step={1} value={fields.season || ''} onChange={(event) => setFields({ ...fields, season: Number(event.target.value) })} /></label><label><span>{t('episode')}</span><input type="number" inputMode="numeric" required min={1} step={1} value={fields.episode || ''} onChange={(event) => setFields({ ...fields, episode: Number(event.target.value) })} /></label></div>}
         <StarRating name={t('enesRating')} value={fields.enesRating} onChange={(enesRating) => setFields({ ...fields, enesRating })} disabled={saving} />
         <StarRating name={t('ervaRating')} value={fields.ervaRating} onChange={(ervaRating) => setFields({ ...fields, ervaRating })} disabled={saving} />
         <ImageSearch title={fields.title} value={fields.imageUrl} onChange={(imageUrl) => setFields((current) => ({ ...current, imageUrl }))} />

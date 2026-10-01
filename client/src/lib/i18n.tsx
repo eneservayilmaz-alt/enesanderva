@@ -5,6 +5,7 @@ export type Language = 'tr' | 'en'
 const copy = {
   tr: {
     anime: 'Animeler', enesRating: "Enes’in Puanı", ervaRating: "Erva’nın Puanı", unrated: 'Puan verilmedi',
+    seasonEpisode: 'Sezon / Bölüm', notApplicable: 'Film için uygulanmaz',
     sortBy: 'Sıralama', sortTitleAsc: 'A’dan Z’ye', sortTitleDesc: 'Z’den A’ya',
     sortEnesDesc: 'Enes’in puanı: yüksekten düşüğe', sortErvaDesc: 'Erva’nın puanı: yüksekten düşüğe',
     sortEnesAsc: 'Enes’in puanı: düşükten yükseğe', sortErvaAsc: 'Erva’nın puanı: düşükten yükseğe', ratings: 'Puanlamalar', actions: 'İşlemler', animeOne: 'Anime',
@@ -30,6 +31,7 @@ const copy = {
   },
   en: {
     anime: 'Anime', enesRating: "Enes’s rating", ervaRating: "Erva’s rating", unrated: 'Not rated',
+    seasonEpisode: 'Season / Episode', notApplicable: 'Not applicable to films',
     sortBy: 'Sort by', sortTitleAsc: 'A to Z', sortTitleDesc: 'Z to A',
     sortEnesDesc: 'Enes’s rating: high to low', sortErvaDesc: 'Erva’s rating: high to low',
     sortEnesAsc: 'Enes’s rating: low to high', sortErvaAsc: 'Erva’s rating: low to high', ratings: 'Ratings', actions: 'Actions', animeOne: 'Anime',

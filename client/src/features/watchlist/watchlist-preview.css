@@ -14,7 +14,9 @@
   line-height: 1;
 }
 .watch-preview-heading p { margin: 22px 0 0; font-size: clamp(14px, 1.3vw, 18px); line-height: 1.7; }
-.watch-preview-heading .text-link { width: max-content; flex-shrink: 0; }
+.watch-preview-content { display: flex; align-items: center; gap: 22px; min-width: 0; }
+.watch-preview-text { min-width: 0; }
+.watch-preview-poster { width: 80px; height: 116px; object-fit: contain; flex-shrink: 0; }
 .watch-preview-list { border-top: 1px solid var(--line); }
 .watch-preview-link {
   display: grid;
@@ -39,6 +41,8 @@
 .watch-preview-message p { width: 100%; margin: 0; }
 
 @media (max-width: 760px) {
+  .watch-preview-content { gap: 12px; }
+  .watch-preview-poster { width: 46px; height: 70px; }
   .watch-preview-link { grid-template-columns: 24px minmax(0, 1fr) 22px; gap: 14px; padding: 24px 0; }
   .watch-preview-status { grid-column: 2; font-size: 10px; }
   .watch-preview-arrow { grid-column: 3; grid-row: 1; }
