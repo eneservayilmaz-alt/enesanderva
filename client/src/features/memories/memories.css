@@ -30,6 +30,9 @@
 .archive-page .archive-grid .photo-index{left:12px}
 .archive-page .archive-grid .photo-heart{right:12px}
 .archive-page .archive-grid .memory-caption{font-size:10px;gap:6px;line-height:1.5}
+.archive-load-more{align-self:center;margin:0 auto 24px;padding:12px 20px;border:1px solid var(--line);background:transparent;color:var(--paper);font-size:12px;transition:background .25s,color .25s,border-color .25s}
+.archive-load-more:is(:hover,:focus-visible){border-color:var(--rose);background:var(--rose);color:#0c0c0b}
+.archive-load-more:focus-visible{outline:2px solid var(--rose);outline-offset:4px}
 .memory-lightbox{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:56px 5vw 28px;border:0;background:#0c0c0bf2;color:#f1efe7}
 .memory-lightbox::backdrop{background:#000b}
 .memory-lightbox figure{height:100%;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none}
@@ -47,12 +50,14 @@
 .memory-lightbox figcaption{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;line-height:1.4}
 .memory-lightbox figcaption span{font:11px var(--mono);color:var(--rose)}
 .memory-lightbox-close{position:absolute;right:20px;top:14px;width:44px;height:44px;display:grid;place-items:center;border:1px solid #f1efe74d;border-radius:50%;background:#0c0c0b;color:#f1efe7}
-@media(max-width:1100px){.archive-page .archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1100px){.archive-page .archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.home-memory-grid .memory-leaf-picker{display:none}}
+@media(max-width:1100px){
+  .home-memory-grid .memory-day-stack{margin-right:calc(var(--stack-space) * .4);margin-top:calc(var(--stack-space) * .4)}
+  .home-memory-grid .memory-day-stack .memory-leaf{transform:translate(calc(var(--leaf-offset) * .4),calc(-1 * var(--leaf-offset) * .4)) rotate(var(--leaf-angle))}
+}
 @media(max-width:760px){
   .home-memory-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}
-  .home-memory-grid .memory-leaf-picker{display:none}
-  .home-memory-grid .memory-day-stack{margin-right:calc(var(--stack-space) * .4);margin-top:calc(var(--stack-space) * .4)}
-  .home-memory-grid .memory-day-stack:is(:hover,:focus-within) .memory-leaf{transform:translate(calc(var(--leaf-offset) * .4),calc(-1 * var(--leaf-offset) * .4)) rotate(var(--leaf-angle))}
+  .home-memory-grid .memory-day-card:nth-child(n + 3){display:none}
   .home-memory-grid .memory-day-card .photo-title{font-size:12px;left:7px;bottom:8px}
   .home-memory-grid .memory-day-card .photo-index{top:7px;left:7px;font-size:8px}
   .home-memory-grid .memory-day-card .photo-heart{top:7px;right:7px}

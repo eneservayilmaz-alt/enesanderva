@@ -117,7 +117,7 @@ export function AdminMemories() {
   return (
     <section>
       <div className="admin-section-header">
-        <h1>{t('navMemories')}<span className="accent">.</span></h1>
+        <h1>{t('navMemories')}<span className="accent">.</span><sup className="archive-count" aria-label={`${memories.length} ${t('entries')}`}>{loading ? '—' : String(memories.length).padStart(2, '0')}</sup></h1>
         <button className="admin-add-btn" onClick={openAdd}><Plus size={16} /> {t('add')}</button>
       </div>
 

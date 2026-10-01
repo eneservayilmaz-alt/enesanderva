@@ -4,6 +4,7 @@ export type Language = 'tr' | 'en'
 
 const copy = {
   tr: {
+    showMore: 'Devamını gör',
     previousPhoto: 'Önceki fotoğraf', nextPhoto: 'Sonraki fotoğraf',
     anime: 'Animeler', enesRating: "Enes’in Puanı", ervanurRating: "Ervanur’un Puanı", unrated: 'Puan verilmedi',
     seasonEpisode: 'Sezon / Bölüm', notApplicable: 'Film için uygulanmaz',
@@ -34,6 +35,7 @@ const copy = {
     footerLine: 'EN GÜZEL ŞEYLER, BİRLİKTEYKEN.', footerTitle: 'Bu hikâye', footerEnd: 'devam ediyor.', footerSign: 'SEVGİYLE, İKİMİZ.', top: 'YUKARI ÇIK ↑', languageLabel: 'Dili English yap', themeLabel: 'Açık temaya geç', themeDarkLabel: 'Koyu temaya geç', loginTitle: 'Giriş Yap', loginEmail: 'E-posta', loginPassword: 'Şifre', loginButton: 'Giriş', loginError: 'E-posta veya şifre hatalı.', loginRequired: 'Bu sayfayı görüntülemek için giriş yapmalısınız.', adminTitle: 'Yönetim Paneli', adminWelcome: 'Hoş geldiniz, yönetici.', adminLogout: 'Çıkış Yap', navAdmin: 'Yönetim', adminDeleteConfirm: 'Bu kaydı silmek istediğinize emin misiniz?', adminMemoryTitle: 'Başlık', adminMemoryDate: 'Tarih', adminMemoryImage: 'Görsel', adminMemoryNote: 'Not', adminType: 'Tür', adminStatus: 'Durum', edit: 'Düzenle', delete: 'Sil', cancel: 'İptal', confirmDelete: 'Evet, sil', deleteConfirmTitle: 'Silmek istediğinize emin misiniz?', editMemory: 'Anıyı düzenle', addMemory: 'Yeni anı ekle', editMedia: 'Dizi veya filmi düzenle', aboutHeading: 'Başlığın ilk satırı', aboutHeadingSecond: 'Başlığın ikinci satırı', aboutParagraphOne: 'Birinci paragraf', aboutParagraphTwo: 'İkinci paragraf', chooseImage: 'Kütüphaneden görsel seç', uploadingImage: 'Görsel Cloudinary’ye yükleniyor', imageUploadFailed: 'Görsel yüklenemedi. Sunucu ve Cloudinary bağlantısını kontrol edin.', imageOnly: 'Lütfen bir görsel dosyası seçin.', imageTooLarge: 'Görsel boyutu en fazla 10 MB olabilir.', memoryImagePreview: 'Seçilen görselin önizlemesi', memoryDatePlaceholder: 'Örn. 19 Temmuz 2026', backToHome: 'Ana sayfaya dön',
   },
   en: {
+    showMore: 'Show more',
     previousPhoto: 'Previous photo', nextPhoto: 'Next photo',
     anime: 'Anime', enesRating: "Enes’s rating", ervanurRating: "Ervanur’s rating", unrated: 'Not rated',
     seasonEpisode: 'Season / Episode', notApplicable: 'Not applicable to films',
