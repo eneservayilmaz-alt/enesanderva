@@ -10,7 +10,7 @@ import { StarRating } from '../watchlist/StarRating'
 import { ImageSearch } from '../watchlist/ImageSearch'
 import { sortWatchlist } from '../watchlist/watchlistSort'
 
-const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervaRating: 0, imageUrl: '', season: 1, episode: 1 }
+const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervanurRating: 0, imageUrl: '', season: 1, episode: 1 }
 export function AdminWatchlist() {
   const { t } = useLanguage()
   const [items, setItems] = useState<WatchItem[]>([])
@@ -52,7 +52,7 @@ export function AdminWatchlist() {
 
   const openEditor = (item?: WatchItem) => {
     setEditing(item || null)
-    setFields(item ? { title: item.title, kind: item.kind, enesRating: item.enesRating || 0, ervaRating: item.ervaRating || 0, imageUrl: item.imageUrl || '', season: item.season || 1, episode: item.episode || 1 } : emptyFields)
+    setFields(item ? { title: item.title, kind: item.kind, enesRating: item.enesRating || 0, ervanurRating: item.ervanurRating || 0, imageUrl: item.imageUrl || '', season: item.season || 1, episode: item.episode || 1 } : emptyFields)
     setError(''); setEditorOpen(true)
   }
 
@@ -110,11 +110,11 @@ export function AdminWatchlist() {
         <div className="admin-form-row">{(['series', 'movie', 'anime'] as const).map((kind) => <label className="admin-radio" key={kind}><input type="radio" name="kind" checked={fields.kind === kind} onChange={() => setFields({ ...fields, kind })} /> {t(kind === 'series' ? 'seriesOne' : kind)}</label>)}</div>
         {fields.kind !== 'movie' && <div className="media-editor-progress"><h3>{t('seasonEpisode')}</h3><label><span>{t('season')}</span><input type="number" inputMode="numeric" required min={1} step={1} value={fields.season || ''} onChange={(event) => setFields({ ...fields, season: Number(event.target.value) })} /></label><label><span>{t('episode')}</span><input type="number" inputMode="numeric" required min={1} step={1} value={fields.episode || ''} onChange={(event) => setFields({ ...fields, episode: Number(event.target.value) })} /></label></div>}
         <StarRating name={t('enesRating')} value={fields.enesRating} onChange={(enesRating) => setFields({ ...fields, enesRating })} disabled={saving} />
-        <StarRating name={t('ervaRating')} value={fields.ervaRating} onChange={(ervaRating) => setFields({ ...fields, ervaRating })} disabled={saving} />
+        <StarRating name={t('ervanurRating')} value={fields.ervanurRating} onChange={(ervanurRating) => setFields({ ...fields, ervanurRating })} disabled={saving} />
         <ImageSearch title={fields.title} value={fields.imageUrl} onChange={(imageUrl) => setFields((current) => ({ ...current, imageUrl }))} />
       </fieldset>
-      {error && <p className="admin-form-error" role="alert">{error}</p>}
-      <div className="admin-modal-actions"><button type="button" disabled={saving} className="admin-cancel-btn" onClick={() => setEditorOpen(false)}>{t('cancel')}</button><button type="submit" className="admin-save-btn" disabled={saving}>{saving && <LoaderCircle className="spin" size={15} />}{t('save')}</button></div></form>
+        {error && <p className="admin-form-error" role="alert">{error}</p>}
+        <div className="admin-modal-actions"><button type="button" disabled={saving} className="admin-cancel-btn" onClick={() => setEditorOpen(false)}>{t('cancel')}</button><button type="submit" className="admin-save-btn" disabled={saving}>{saving && <LoaderCircle className="spin" size={15} />}{t('save')}</button></div></form>
     </section></div>}
     {deleting && <div className="admin-modal-backdrop"><section ref={dialog} className="admin-modal admin-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="media-delete-title"><h2 id="media-delete-title">{t('deleteConfirmTitle')}</h2><p>{t('adminDeleteConfirm')}</p>{error && <p role="alert" className="admin-form-error">{error}</p>}<div className="admin-modal-actions"><button disabled={saving} className="admin-cancel-btn" onClick={() => setDeleting(null)}>{t('cancel')}</button><button disabled={saving} className="admin-confirm-delete" onClick={handleDelete}>{t('confirmDelete')}</button></div></section></div>}
   </section>

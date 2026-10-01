@@ -40,12 +40,12 @@ service cloud.firestore {
       function validItem() {
         let item = request.resource.data;
         return item.keys().hasOnly(['title', 'kind', 'status', 'season', 'episode',
-          'enesRating', 'ervaRating', 'imageUrl', 'createdAt'])
+          'enesRating', 'ervanurRating', 'imageUrl', 'createdAt'])
           && item.title is string && item.title.size() > 0 && item.title.size() <= 100
           && item.kind in ['series', 'movie', 'anime']
           && item.status in ['planned', 'watching', 'completed']
           && item.enesRating is int && item.enesRating >= 0 && item.enesRating <= 5
-          && item.ervaRating is int && item.ervaRating >= 0 && item.ervaRating <= 5
+          && item.ervanurRating is int && item.ervanurRating >= 0 && item.ervanurRating <= 5
           && item.imageUrl is string
           && (item.imageUrl == '' || item.imageUrl.matches('https?://.*'))
           && item.createdAt is string

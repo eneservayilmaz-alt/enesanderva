@@ -8,7 +8,7 @@ export function sortWatchlist(items: readonly WatchItem[], sort: WatchlistSort =
     const alphabetical = titleOrder.compare(a.title, b.title)
     if (sort === 'title-desc') return -alphabetical
     if (sort.startsWith('enes-') || sort.startsWith('erva-')) {
-      const field = sort.startsWith('enes-') ? 'enesRating' : 'ervaRating'
+      const field = sort.startsWith('enes-') ? 'enesRating' : 'ervanurRating'
       const left = a[field] || 0, right = b[field] || 0
       if (!left && right) return 1
       if (left && !right) return -1

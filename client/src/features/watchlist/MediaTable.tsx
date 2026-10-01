@@ -29,7 +29,7 @@ export function MediaTable({ items, showKind, onStatusChange, renderActions, bus
         <div><h3>{item.kind === 'movie' ? <Film size={15} /> : <Tv size={15} />}{item.title}</h3>
         </div>
       </div>}</div>
-      <div className="media-ratings-cell" role="cell" data-label={t('ratings')}><div className="media-cell-value"><StarRating name={t('enesRating')} value={item.enesRating} /><StarRating name={t('ervaRating')} value={item.ervaRating} /></div></div>
+      <div className="media-ratings-cell" role="cell" data-label={t('ratings')}><div className="media-cell-value"><StarRating name={t('enesRating')} value={item.enesRating} /><StarRating name={t('ervanurRating')} value={item.ervanurRating} /></div></div>
       {showProgress && <div className="media-progress-cell" role="cell" data-label={t('seasonEpisode')}><div className="media-cell-value media-progress-values">{item.kind === 'movie' ? <span aria-label={t('notApplicable')}>—</span> : <><span>{t('season')} <strong>{item.season ?? 1}</strong></span><span>{t('episode')} <strong>{item.episode ?? 1}</strong></span></>}</div></div>}
       <div className="media-status-cell" role="cell" data-label={t('adminStatus')}><div className="media-cell-value"><button className={`media-status-badge admin-status--${item.status}`} disabled={!onStatusChange || busy} onClick={() => onStatusChange?.(item)}>
         {item.status === 'completed' && <Check size={13} />}{t(item.status === 'completed' ? 'finished' : item.status === 'watching' ? 'ongoing' : 'planned')}

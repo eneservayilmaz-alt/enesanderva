@@ -5,7 +5,7 @@ export type Language = 'tr' | 'en'
 const copy = {
   tr: {
     previousPhoto: 'Önceki fotoğraf', nextPhoto: 'Sonraki fotoğraf',
-    anime: 'Animeler', enesRating: "Enes’in Puanı", ervaRating: "Ervanur’un Puanı", unrated: 'Puan verilmedi',
+    anime: 'Animeler', enesRating: "Enes’in Puanı", ervanurRating: "Ervanur’un Puanı", unrated: 'Puan verilmedi',
     seasonEpisode: 'Sezon / Bölüm', notApplicable: 'Film için uygulanmaz',
     mediaNameImage: 'Ad / Görsel',
     memoryWriteDenied: 'Fotoğraf kaydedilemedi. Firestore memories koleksiyonu için admin yazma izni bulunmuyor. Firebase kurallarını kontrol edin.',
@@ -35,7 +35,7 @@ const copy = {
   },
   en: {
     previousPhoto: 'Previous photo', nextPhoto: 'Next photo',
-    anime: 'Anime', enesRating: "Enes’s rating", ervaRating: "Ervanur’s rating", unrated: 'Not rated',
+    anime: 'Anime', enesRating: "Enes’s rating", ervanurRating: "Ervanur’s rating", unrated: 'Not rated',
     seasonEpisode: 'Season / Episode', notApplicable: 'Not applicable to films',
     mediaNameImage: 'Title / Image',
     memoryWriteDenied: 'Photo could not be saved. Admin write access to the Firestore memories collection is missing. Check the Firebase rules.',

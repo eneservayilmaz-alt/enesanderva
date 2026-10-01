@@ -13,7 +13,7 @@ export type WatchItem = {
   season?: number | null
   episode?: number | null
   enesRating?: number
-  ervaRating?: number
+  ervanurRating?: number
   imageUrl?: string
   createdAt?: string
 }
