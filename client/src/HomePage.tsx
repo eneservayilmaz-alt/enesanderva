@@ -27,6 +27,7 @@ type AboutContent = { tr?: { first?: string; second?: string; copy1?: string; co
 function currentPage(): string {
   const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '')
   if (path === '' || path === '/') return 'home'
+  if (path === 'login') return 'giris'
   if (PAGES.includes(path as any)) return path
   if (path === 'admin') return 'admin'
   for (const sub of ADMIN_SUBS) {

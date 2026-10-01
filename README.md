@@ -18,6 +18,10 @@ Cloudinary'den cloud name, API key ve API secret alın. İmzalı yüklemelerde A
 
 ## İlk sürüm
 
+### Netlify yönlendirmeleri
+
+Netlify yayın klasörü `client/dist` olmalıdır (base directory `client` seçiliyse `dist`). `client/public/_redirects` derleme sırasında yayın klasörüne kopyalanır ve doğrudan açılan `/login`, `/giris`, `/admin` ve admin alt sayfalarını React uygulamasına iletir. `/login` ile `/giris` aynı giriş ekranını açar; admin sayfaları Firebase oturumu gerektirir. Bu değişikliğin canlıya geçmesi için yeni deploy gerekir. Statik Netlify yayını Express API sunucusunu çalıştırmaz; `/api` uçları ayrıca bir sunucu veya function gerektirir.
+
 - “Hakkımızda” ve “Anılarımız” gezinmesi
 - Dizi ve film izleme listesi; tür filtresi, bitirme durumu ve dizi sezon/bölüm ilerlemesi
 - Framer Motion ile giriş ve anı kartı geçişleri; mobil uyumlu Tailwind CSS düzeni

@@ -1,100 +1,125 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Trash2, Plus, LoaderCircle, Pencil, X } from 'lucide-react'
-import { useLanguage } from '../../lib/i18n'
-import { collection, getDocs, deleteDoc, doc, addDoc, updateDoc, orderBy, query } from 'firebase/firestore'
+import { collection, deleteDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
+import { useLanguage } from '../../lib/i18n'
+import { getDataErrorKey } from '../../lib/dataErrors'
+import { getWatchlist, type Kind, type WatchItem } from '../watchlist/watchlistService'
+import { StarRating } from '../watchlist/StarRating'
+import { ImageSearch } from '../watchlist/ImageSearch'
 
-type WatchItem = { id: string; title: string; kind: string; status: string; season: number | null; episode: number | null; createdAt: string }
-
+const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervaRating: 0, imageUrl: '' }
 export function AdminWatchlist() {
   const { t } = useLanguage()
   const [items, setItems] = useState<WatchItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [showForm, setShowForm] = useState(false)
-  const [title, setTitle] = useState('')
-  const [kind, setKind] = useState<'series' | 'movie'>('series')
-  const [saving, setSaving] = useState(false)
+  const [editorOpen, setEditorOpen] = useState(false)
   const [editing, setEditing] = useState<WatchItem | null>(null)
   const [deleting, setDeleting] = useState<WatchItem | null>(null)
-  const [editFields, setEditFields] = useState({ title: '', kind: 'series' as 'series' | 'movie' })
+  const [fields, setFields] = useState(emptyFields)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const dialog = useRef<HTMLElement>(null)
+  const opener = useRef<HTMLElement | null>(null)
+  const busy = useRef(false)
+  busy.current = saving
 
-  const load = async () => {
-    setLoading(true)
-    const snap = await getDocs(query(collection(db, 'watchlist'), orderBy('createdAt', 'desc')))
-    setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() } as WatchItem)))
-    setLoading(false)
+  useEffect(() => {
+    const controller = new AbortController()
+    getWatchlist(controller.signal).then(setItems).catch((cause) => { if (!controller.signal.aborted) setError(t(getDataErrorKey(cause))) }).finally(() => { if (!controller.signal.aborted) setLoading(false) })
+    return () => controller.abort()
+  }, [t])
+
+  useEffect(() => {
+    if (!editorOpen && !deleting) return
+    opener.current = document.activeElement as HTMLElement
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialog.current?.querySelector<HTMLElement>('input,button')?.focus()
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !busy.current) { setEditorOpen(false); setDeleting(null) }
+      if (event.key !== 'Tab') return
+      const elements = Array.from(dialog.current?.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),a[href]') || [])
+      const first = elements[0], last = elements[elements.length - 1]
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', handleKey); opener.current?.focus() }
+  }, [editorOpen, deleting])
+
+  const openEditor = (item?: WatchItem) => {
+    setEditing(item || null)
+    setFields(item ? { title: item.title, kind: item.kind, enesRating: item.enesRating || 0, ervaRating: item.ervaRating || 0, imageUrl: item.imageUrl || '' } : emptyFields)
+    setError(''); setEditorOpen(true)
   }
 
-  useEffect(() => { load() }, [])
+  const save = async (event: FormEvent) => {
+    event.preventDefault()
+    if (saving || !fields.title.trim()) return
+    if (fields.imageUrl && !/^https?:\/\//i.test(fields.imageUrl.trim())) { setError(t('invalidImageUrl')); return }
+    setSaving(true); setError('')
+    const values = { ...fields, title: fields.title.trim(), imageUrl: fields.imageUrl.trim(), season: fields.kind !== 'movie' ? editing?.season || 1 : null, episode: fields.kind !== 'movie' ? editing?.episode || 1 : null }
+    try {
+      if (editing) {
+        await updateDoc(doc(db, 'watchlist', editing.id), values)
+        setItems((previous) => previous.map((item) => item.id === editing.id ? { ...item, ...values } : item))
+      } else {
+        const record = { ...values, status: 'planned' as const, createdAt: new Date().toISOString() }
+        const reference = await addDoc(collection(db, 'watchlist'), record)
+        setItems((previous) => [{ id: reference.id, ...record }, ...previous])
+      }
+      setEditorOpen(false)
+    } catch (cause) { setError(`${t('saveError')} ${t(getDataErrorKey(cause))}`) }
+    finally { setSaving(false) }
+  }
 
   const handleDelete = async () => {
-    if (!deleting) return
-    await deleteDoc(doc(db, 'watchlist', deleting.id))
-    setItems((prev) => prev.filter((item) => item.id !== deleting.id))
-    setDeleting(null)
-  }
-
-  const openEdit = (item: WatchItem) => { setEditing(item); setEditFields({ title: item.title, kind: item.kind === 'movie' ? 'movie' : 'series' }) }
-
-  const saveEdit = async () => {
-    if (!editing || !editFields.title.trim()) return
-    setSaving(true)
-    const update = { title: editFields.title.trim(), kind: editFields.kind, season: editFields.kind === 'series' ? editing.season || 1 : null, episode: editFields.kind === 'series' ? editing.episode || 1 : null }
-    await updateDoc(doc(db, 'watchlist', editing.id), update)
-    setItems((prev) => prev.map((item) => item.id === editing.id ? { ...item, ...update } : item))
-    setEditing(null)
-    setSaving(false)
-  }
-
-  const handleAdd = async () => {
-    if (!title.trim()) return
-    setSaving(true)
-    const record = { title: title.trim(), kind, status: 'planned' as const, season: kind === 'series' ? 1 : null, episode: kind === 'series' ? 1 : null, createdAt: new Date().toISOString() }
-    const ref = await addDoc(collection(db, 'watchlist'), record)
-    setItems((prev) => [{ id: ref.id, ...record }, ...prev])
-    setTitle(''); setShowForm(false); setSaving(false)
+    if (!deleting || saving) return
+    setSaving(true); setError('')
+    try {
+      await deleteDoc(doc(db, 'watchlist', deleting.id))
+      setItems((previous) => previous.filter((item) => item.id !== deleting.id)); setDeleting(null)
+    } catch (cause) { setError(t(getDataErrorKey(cause))) }
+    finally { setSaving(false) }
   }
 
   const cycleStatus = async (item: WatchItem) => {
-    const next = item.status === 'planned' ? 'watching' : item.status === 'watching' ? 'completed' : 'planned'
-    await updateDoc(doc(db, 'watchlist', item.id), { status: next })
-    setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: next } : i))
+    setSaving(true); setError('')
+    const status = item.status === 'planned' ? 'watching' : item.status === 'watching' ? 'completed' : 'planned'
+    try {
+      await updateDoc(doc(db, 'watchlist', item.id), { status })
+      setItems((previous) => previous.map((entry) => entry.id === item.id ? { ...entry, status } : entry))
+    } catch (cause) { setError(t(getDataErrorKey(cause))) }
+    finally { setSaving(false) }
   }
 
-  return (
-    <section>
-      <div className="admin-section-header">
-        <h1>{t('navMedia')}<span className="accent">.</span></h1>
-        <button className="admin-add-btn" onClick={() => setShowForm(!showForm)}><Plus size={16} /> {t('add')}</button>
-      </div>
-
-      {showForm && <div className="admin-form">
-        <label><span>{t('titleLabel')}</span><input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('titlePlaceholder')} /></label>
-        <div className="admin-form-row">
-          <label className="admin-radio"><input type="radio" name="kind" checked={kind === 'series'} onChange={() => setKind('series')} /> {t('seriesOne')}</label>
-          <label className="admin-radio"><input type="radio" name="kind" checked={kind === 'movie'} onChange={() => setKind('movie')} /> {t('movie')}</label>
-        </div>
-        <button className="admin-save-btn" onClick={handleAdd} disabled={saving}>{saving ? '...' : t('save')}</button>
-      </div>}
-
-      {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> :
-      items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> :
-      <div className="admin-table">
-        <div className="admin-table-head"><span>#</span><span>{t('titleLabel')}</span><span>{t('adminType')}</span><span>{t('adminStatus')}</span><span></span></div>
-        {items.map((item, i) => (
-          <div className="admin-table-row" key={item.id}>
-            <span className="admin-row-num">{String(i + 1).padStart(2, '0')}</span>
-            <span className="admin-row-title">{item.title}</span>
-            <span className="admin-row-kind">{item.kind === 'series' ? t('seriesOne') : t('movie')}</span>
-            <button className={`admin-status-btn admin-status--${item.status}`} onClick={() => cycleStatus(item)}>
-              {item.status === 'completed' ? t('finished') : item.status === 'watching' ? t('ongoing') : t('planned')}
-            </button>
-            <div className="admin-row-actions"><button className="admin-edit-btn" aria-label={t('edit')} onClick={() => openEdit(item)}><Pencil size={14} /></button><button className="admin-delete-btn" aria-label={t('delete')} onClick={() => setDeleting(item)}><Trash2 size={14} /></button></div>
-          </div>
-        ))}
-      </div>}
-      {editing && <div className="admin-modal-backdrop" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget) setEditing(null) }}><section className="admin-modal" role="dialog" aria-modal="true" aria-labelledby="media-edit-title"><button className="admin-modal-close" onClick={() => setEditing(null)} aria-label={t('cancel')}><X size={18} /></button><h2 id="media-edit-title">{t('editMedia')}</h2><label><span>{t('titleLabel')}</span><input value={editFields.title} onChange={(e) => setEditFields({ ...editFields, title: e.target.value })} /></label><div className="admin-form-row"><label className="admin-radio"><input type="radio" checked={editFields.kind === 'series'} onChange={() => setEditFields({ ...editFields, kind: 'series' })} /> {t('seriesOne')}</label><label className="admin-radio"><input type="radio" checked={editFields.kind === 'movie'} onChange={() => setEditFields({ ...editFields, kind: 'movie' })} /> {t('movie')}</label></div><div className="admin-modal-actions"><button className="admin-cancel-btn" onClick={() => setEditing(null)}>{t('cancel')}</button><button className="admin-save-btn" onClick={saveEdit} disabled={saving}>{saving ? '...' : t('save')}</button></div></section></div>}
-      {deleting && <div className="admin-modal-backdrop"><section className="admin-modal admin-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="media-delete-title"><h2 id="media-delete-title">{t('deleteConfirmTitle')}</h2><p>{t('adminDeleteConfirm')}</p><div className="admin-modal-actions"><button className="admin-cancel-btn" onClick={() => setDeleting(null)}>{t('cancel')}</button><button className="admin-confirm-delete" onClick={handleDelete}>{t('confirmDelete')}</button></div></section></div>}
-    </section>
-  )
+  return <section>
+    <div className="admin-section-header"><h1>{t('navMedia')}<span className="accent">.</span></h1><button className="admin-add-btn" onClick={() => openEditor()}><Plus size={16} /> {t('add')}</button></div>
+    {error && !editorOpen && !deleting && <p className="admin-form-error" role="alert">{error}</p>}
+    {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> : items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> : <div className="admin-table">
+      <div className="admin-table-head"><span>#</span><span>{t('titleLabel')}</span><span>{t('adminType')}</span><span>{t('adminStatus')}</span><span /></div>
+      {items.map((item, index) => <div className="admin-table-row" key={item.id}>
+        <span className="admin-row-num">{String(index + 1).padStart(2, '0')}</span>
+        <div className="admin-row-title">{item.title}<StarRating name={t('enesRating')} value={item.enesRating} /><StarRating name={t('ervaRating')} value={item.ervaRating} /></div>
+        <span className="admin-row-kind">{t(item.kind === 'anime' ? 'anime' : item.kind === 'series' ? 'seriesOne' : 'movie')}</span>
+        <button disabled={saving} className={`admin-status-btn admin-status--${item.status}`} onClick={() => cycleStatus(item)}>{t(item.status === 'completed' ? 'finished' : item.status === 'watching' ? 'ongoing' : 'planned')}</button>
+        <div className="admin-row-actions"><button className="admin-edit-btn" disabled={saving} aria-label={t('edit')} onClick={() => openEditor(item)}><Pencil size={14} /></button><button className="admin-delete-btn" disabled={saving} aria-label={t('delete')} onClick={() => { setError(''); setDeleting(item) }}><Trash2 size={14} /></button></div>
+      </div>)}
+    </div>}
+    {editorOpen && <div className="admin-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !saving) setEditorOpen(false) }}><section ref={dialog} className="admin-modal media-editor-modal" role="dialog" aria-modal="true" aria-labelledby="media-editor-title">
+      <button className="admin-modal-close" disabled={saving} onClick={() => setEditorOpen(false)} aria-label={t('cancel')}><X size={18} /></button>
+      <h2 id="media-editor-title">{editing ? t('editMedia') : t('add')}</h2>
+      <form onSubmit={save}><fieldset disabled={saving} className="media-editor-fields">
+        <label><span>{t('titleLabel')}</span><input required maxLength={100} value={fields.title} onChange={(event) => setFields({ ...fields, title: event.target.value })} placeholder={t('titlePlaceholder')} /></label>
+        <div className="admin-form-row">{(['series', 'movie', 'anime'] as const).map((kind) => <label className="admin-radio" key={kind}><input type="radio" name="kind" checked={fields.kind === kind} onChange={() => setFields({ ...fields, kind })} /> {t(kind === 'series' ? 'seriesOne' : kind)}</label>)}</div>
+        <StarRating name={t('enesRating')} value={fields.enesRating} onChange={(enesRating) => setFields({ ...fields, enesRating })} disabled={saving} />
+        <StarRating name={t('ervaRating')} value={fields.ervaRating} onChange={(ervaRating) => setFields({ ...fields, ervaRating })} disabled={saving} />
+        <ImageSearch title={fields.title} value={fields.imageUrl} onChange={(imageUrl) => setFields((current) => ({ ...current, imageUrl }))} />
+      </fieldset>
+      {error && <p className="admin-form-error" role="alert">{error}</p>}
+      <div className="admin-modal-actions"><button type="button" disabled={saving} className="admin-cancel-btn" onClick={() => setEditorOpen(false)}>{t('cancel')}</button><button type="submit" className="admin-save-btn" disabled={saving}>{saving && <LoaderCircle className="spin" size={15} />}{t('save')}</button></div></form>
+    </section></div>}
+    {deleting && <div className="admin-modal-backdrop"><section ref={dialog} className="admin-modal admin-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="media-delete-title"><h2 id="media-delete-title">{t('deleteConfirmTitle')}</h2><p>{t('adminDeleteConfirm')}</p>{error && <p role="alert" className="admin-form-error">{error}</p>}<div className="admin-modal-actions"><button disabled={saving} className="admin-cancel-btn" onClick={() => setDeleting(null)}>{t('cancel')}</button><button disabled={saving} className="admin-confirm-delete" onClick={handleDelete}>{t('confirmDelete')}</button></div></section></div>}
+  </section>
 }

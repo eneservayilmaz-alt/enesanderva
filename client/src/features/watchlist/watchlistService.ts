@@ -1,6 +1,7 @@
-import { DataLoadError } from '../../lib/dataErrors'
+import { collection, getDocs, orderBy, query, doc, updateDoc } from 'firebase/firestore'
+import { db } from '../../lib/firebase'
 
-export type Kind = 'series' | 'movie'
+export type Kind = 'series' | 'movie' | 'anime'
 export type Status = 'planned' | 'watching' | 'completed'
 
 export type WatchItem = {
@@ -8,29 +9,21 @@ export type WatchItem = {
   title: string
   kind: Kind
   status: Status
-  season?: number
-  episode?: number
+  season?: number | null
+  episode?: number | null
+  enesRating?: number
+  ervaRating?: number
+  imageUrl?: string
+  createdAt?: string
 }
 
 export async function getWatchlist(signal?: AbortSignal): Promise<WatchItem[]> {
-  let response: Response
-  try {
-    response = await fetch('/api/watchlist', { signal })
-  } catch (error) {
-    if (signal?.aborted) throw error
-    throw new DataLoadError('API_UNAVAILABLE')
-  }
+  signal?.throwIfAborted()
+  const snapshot = await getDocs(query(collection(db, 'watchlist'), orderBy('createdAt', 'desc')))
+  signal?.throwIfAborted()
+  return snapshot.docs.map((entry) => ({ ...entry.data(), id: entry.id } as WatchItem))
+}
 
-  let items: unknown
-  try {
-    items = await response.json()
-  } catch {
-    throw new DataLoadError('API_UNAVAILABLE')
-  }
-  if (!response.ok) {
-    const code = items && typeof items === 'object' && 'code' in items ? String(items.code) : 'API_ERROR'
-    throw new DataLoadError(code)
-  }
-  if (!Array.isArray(items)) throw new DataLoadError('API_UNAVAILABLE')
-  return items as WatchItem[]
+export async function updateWatchItem(id: string, changes: Partial<WatchItem>) {
+  await updateDoc(doc(db, 'watchlist', id), changes)
 }
