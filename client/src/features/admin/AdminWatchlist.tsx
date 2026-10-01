@@ -5,11 +5,12 @@ import { db } from '../../lib/firebase'
 import { useLanguage } from '../../lib/i18n'
 import { getDataErrorKey } from '../../lib/dataErrors'
 import { getWatchlist, type Kind, type WatchItem } from '../watchlist/watchlistService'
+import { MediaTable } from '../watchlist/MediaTable'
 import { StarRating } from '../watchlist/StarRating'
 import { ImageSearch } from '../watchlist/ImageSearch'
 import { sortWatchlist } from '../watchlist/watchlistSort'
 
-const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervaRating: 0, imageUrl: '' }
+const emptyFields = { title: '', kind: 'series' as Kind, enesRating: 0, ervaRating: 0, imageUrl: '', season: 1, episode: 1 }
 export function AdminWatchlist() {
   const { t } = useLanguage()
   const [items, setItems] = useState<WatchItem[]>([])
@@ -51,7 +52,7 @@ export function AdminWatchlist() {
 
   const openEditor = (item?: WatchItem) => {
     setEditing(item || null)
-    setFields(item ? { title: item.title, kind: item.kind, enesRating: item.enesRating || 0, ervaRating: item.ervaRating || 0, imageUrl: item.imageUrl || '' } : emptyFields)
+    setFields(item ? { title: item.title, kind: item.kind, enesRating: item.enesRating || 0, ervaRating: item.ervaRating || 0, imageUrl: item.imageUrl || '', season: item.season || 1, episode: item.episode || 1 } : emptyFields)
     setError(''); setEditorOpen(true)
   }
 
@@ -60,7 +61,7 @@ export function AdminWatchlist() {
     if (saving || !fields.title.trim()) return
     if (fields.imageUrl && !/^https?:\/\//i.test(fields.imageUrl.trim())) { setError(t('invalidImageUrl')); return }
     setSaving(true); setError('')
-    const values = { ...fields, title: fields.title.trim(), imageUrl: fields.imageUrl.trim(), season: fields.kind !== 'movie' ? editing?.season || 1 : null, episode: fields.kind !== 'movie' ? editing?.episode || 1 : null }
+    const values = { ...fields, title: fields.title.trim(), imageUrl: fields.imageUrl.trim(), season: fields.kind !== 'movie' ? fields.season : null, episode: fields.kind !== 'movie' ? fields.episode : null }
     try {
       if (editing) {
         await updateDoc(doc(db, 'watchlist', editing.id), values)
@@ -98,22 +99,15 @@ export function AdminWatchlist() {
   return <section>
     <div className="admin-section-header"><h1>{t('navMedia')}<span className="accent">.</span></h1><button className="admin-add-btn" onClick={() => openEditor()}><Plus size={16} /> {t('add')}</button></div>
     {error && !editorOpen && !deleting && <p className="admin-form-error" role="alert">{error}</p>}
-    {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> : items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> : <div className="admin-table">
-      <div className="admin-table-head"><span>#</span><span>{t('titleLabel')}</span><span>{t('adminType')}</span><span>{t('adminStatus')}</span><span /></div>
-      {sortWatchlist(items).map((item, index) => <div className="admin-table-row" key={item.id}>
-        <span className="admin-row-num">{String(index + 1).padStart(2, '0')}</span>
-        <div className="admin-row-title">{item.title}<StarRating name={t('enesRating')} value={item.enesRating} /><StarRating name={t('ervaRating')} value={item.ervaRating} /></div>
-        <span className="admin-row-kind">{t(item.kind === 'anime' ? 'anime' : item.kind === 'series' ? 'seriesOne' : 'movie')}</span>
-        <button disabled={saving} className={`admin-status-btn admin-status--${item.status}`} onClick={() => cycleStatus(item)}>{t(item.status === 'completed' ? 'finished' : item.status === 'watching' ? 'ongoing' : 'planned')}</button>
-        <div className="admin-row-actions"><button className="admin-edit-btn" disabled={saving} aria-label={t('edit')} onClick={() => openEditor(item)}><Pencil size={14} /></button><button className="admin-delete-btn" disabled={saving} aria-label={t('delete')} onClick={() => { setError(''); setDeleting(item) }}><Trash2 size={14} /></button></div>
-      </div>)}
-    </div>}
+    {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> : items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> : <MediaTable items={sortWatchlist(items)} showKind busy={saving} onStatusChange={cycleStatus} renderActions={(item) => <div className="admin-row-actions"><button className="admin-edit-btn" disabled={saving} aria-label={t('edit')} onClick={() => openEditor(item)}><Pencil size={14} /></button><button className="admin-delete-btn" disabled={saving} aria-label={t('delete')} onClick={() => { setError(''); setDeleting(item) }}><Trash2 size={14} /></button></div>} />}
+
     {editorOpen && <div className="admin-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !saving) setEditorOpen(false) }}><section ref={dialog} className="admin-modal media-editor-modal" role="dialog" aria-modal="true" aria-labelledby="media-editor-title">
       <button className="admin-modal-close" disabled={saving} onClick={() => setEditorOpen(false)} aria-label={t('cancel')}><X size={18} /></button>
       <h2 id="media-editor-title">{editing ? t('editMedia') : t('add')}</h2>
       <form onSubmit={save}><fieldset disabled={saving} className="media-editor-fields">
         <label><span>{t('titleLabel')}</span><input required maxLength={100} value={fields.title} onChange={(event) => setFields({ ...fields, title: event.target.value })} placeholder={t('titlePlaceholder')} /></label>
         <div className="admin-form-row">{(['series', 'movie', 'anime'] as const).map((kind) => <label className="admin-radio" key={kind}><input type="radio" name="kind" checked={fields.kind === kind} onChange={() => setFields({ ...fields, kind })} /> {t(kind === 'series' ? 'seriesOne' : kind)}</label>)}</div>
+        {fields.kind !== 'movie' && <div className="media-editor-progress"><label><span>{t('season')}</span><input type="number" required min={1} step={1} value={fields.season} onChange={(event) => setFields({ ...fields, season: Number(event.target.value) })} /></label><label><span>{t('episode')}</span><input type="number" required min={1} step={1} value={fields.episode} onChange={(event) => setFields({ ...fields, episode: Number(event.target.value) })} /></label></div>}
         <StarRating name={t('enesRating')} value={fields.enesRating} onChange={(enesRating) => setFields({ ...fields, enesRating })} disabled={saving} />
         <StarRating name={t('ervaRating')} value={fields.ervaRating} onChange={(ervaRating) => setFields({ ...fields, ervaRating })} disabled={saving} />
         <ImageSearch title={fields.title} value={fields.imageUrl} onChange={(imageUrl) => setFields((current) => ({ ...current, imageUrl }))} />
