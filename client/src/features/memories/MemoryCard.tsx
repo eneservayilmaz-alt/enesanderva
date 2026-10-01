@@ -3,6 +3,8 @@ import CloudinaryPhoto from '../../CloudinaryPhoto'
 import type { Memory } from './memoryService'
 import { navigateTo } from '../../lib/auth'
 import './memories.css'
+import { useLanguage } from '../../lib/i18n'
+import { formatMemoryDate } from './memoryGroups'
 
 type MemoryCardProps = {
   memory: Memory
@@ -12,6 +14,8 @@ type MemoryCardProps = {
 }
 
 export function MemoryCard({ memory, index, linkToArchive = false, onOpen }: MemoryCardProps) {
+  const { language } = useLanguage()
+  const dateLabel = formatMemoryDate(memory.date, language)
   const image = memory.publicId
     ? <CloudinaryPhoto publicId={memory.publicId} alt={memory.title} width={1200} height={900} className="memory-cloudinary-image" />
     : memory.imageUrl
@@ -25,10 +29,10 @@ export function MemoryCard({ memory, index, linkToArchive = false, onOpen }: Mem
       <span className="photo-heart"><Heart size={15} /></span>
       <span className="photo-title">{memory.title}</span>
     </div>
-    <div className="memory-caption"><span>{memory.date}</span><ArrowUpRight size={15} /></div>
+    <div className="memory-caption"><span>{dateLabel}</span><ArrowUpRight size={15} /></div>
   </>
 
   return <article className={`memory-card record-focus ${index === 0 ? 'memory-card--large' : ''}`} id={`memory-${memory.id}`} tabIndex={-1}>
-    {onOpen ? <button className="memory-card-button" onClick={onOpen} aria-label={`${memory.title} — ${memory.date}`}>{content}</button> : linkToArchive ? <a className="memory-card-link" href="/anilarimiz" onClick={(e) => { e.preventDefault(); navigateTo('/anilarimiz') }} aria-label={`${memory.title} — Biriktirdiklerimiz`}>{content}</a> : content}
+    {onOpen ? <button className="memory-card-button" onClick={onOpen} aria-label={`${memory.title} — ${dateLabel}`}>{content}</button> : linkToArchive ? <a className="memory-card-link" href="/anilarimiz" onClick={(e) => { e.preventDefault(); navigateTo('/anilarimiz') }} aria-label={`${memory.title} — Biriktirdiklerimiz`}>{content}</a> : content}
   </article>
 }

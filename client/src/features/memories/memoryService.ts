@@ -7,11 +7,15 @@ export type Memory = {
   date: string
   imageUrl: string
   publicId: string
+  createdAt?: number
 }
 
 function toMemory(id: string, value: Record<string, unknown>): Memory {
   const timestamp = value.createdAt as { toDate?: () => Date } | undefined
-  const createdAt = timestamp?.toDate?.()
+  const createdAt = typeof value.createdAt === 'string'
+    ? new Date(value.createdAt)
+    : timestamp?.toDate?.()
+  const createdAtMillis = createdAt?.getTime()
   const date = typeof value.date === 'string'
     ? value.date
     : createdAt?.toLocaleDateString('tr-TR') ?? ''
@@ -22,6 +26,7 @@ function toMemory(id: string, value: Record<string, unknown>): Memory {
     date,
     imageUrl: typeof value.imageUrl === 'string' ? value.imageUrl : '',
     publicId: typeof value.publicId === 'string' ? value.publicId : '',
+    createdAt: createdAtMillis !== undefined && Number.isFinite(createdAtMillis) ? createdAtMillis : undefined,
   }
 }
 

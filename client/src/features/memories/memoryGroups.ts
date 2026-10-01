@@ -1,5 +1,16 @@
 import type { Memory } from './memoryService'
 
+export function formatMemoryDate(date: string, language: 'tr' | 'en'): string {
+  const parts = memoryDateKey(date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+  if (!parts) return date
+  const [, year, month, day] = parts.map(Number)
+  const parsed = new Date(Date.UTC(year, month - 1, day))
+  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return date
+  return new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'tr-TR', {
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+  }).format(parsed)
+}
+
 export function memoryDateKey(date: string): string {
   const value = date.trim().toLocaleLowerCase('tr-TR').replace(/\s+/g, ' ')
   const iso = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:t.*)?$/)
@@ -20,5 +31,8 @@ export function groupMemoriesByDate(memories: Memory[]): Memory[][] {
     group.push(memory)
     groups.set(key, group)
   }
-  return Array.from(groups.values())
+  // The oldest addition is leaf 01, which the stack places in front.
+  return Array.from(groups.values(), (group) => group.sort((a, b) =>
+    (a.createdAt ?? 0) - (b.createdAt ?? 0) || a.id.localeCompare(b.id),
+  ))
 }

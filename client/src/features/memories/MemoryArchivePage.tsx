@@ -28,6 +28,6 @@ export function MemoryArchivePage({ memories, loading, error, count }: MemoryArc
       {memories.map((memory, index) => <MemoryCard key={memory.id} memory={memory} index={index} onOpen={() => setSelected(memory)} />)}
     </div>}
     <div className="memories-foot"><span>{t('moreMemories')}</span><span>{String(count).padStart(2, '0')} {t('entries')}</span></div>
-    {selected && <MemoryLightbox memory={selected} onClose={() => setSelected(null)} />}
+    {selected && <MemoryLightbox memory={selected} memories={memories} onClose={() => setSelected(null)} />}
   </section>
 }

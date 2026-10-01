@@ -4,10 +4,12 @@ export type Language = 'tr' | 'en'
 
 const copy = {
   tr: {
+    previousPhoto: 'Önceki fotoğraf', nextPhoto: 'Sonraki fotoğraf',
     anime: 'Animeler', enesRating: "Enes’in Puanı", ervaRating: "Erva’nın Puanı", unrated: 'Puan verilmedi',
     seasonEpisode: 'Sezon / Bölüm', notApplicable: 'Film için uygulanmaz',
     mediaNameImage: 'Ad / Görsel',
     memoryWriteDenied: 'Fotoğraf kaydedilemedi. Firestore memories koleksiyonu için admin yazma izni bulunmuyor. Firebase kurallarını kontrol edin.',
+    uploadServiceUnavailable: 'Görsel yükleme servisi kullanılamıyor. Lütfen site yöneticisinin yükleme ayarlarını tamamlamasını bekleyin.',
     sortBy: 'Sıralama', sortTitleAsc: 'A’dan Z’ye', sortTitleDesc: 'Z’den A’ya',
     sortEnesDesc: 'Enes’in puanı: yüksekten düşüğe', sortErvaDesc: 'Erva’nın puanı: yüksekten düşüğe',
     sortEnesAsc: 'Enes’in puanı: düşükten yükseğe', sortErvaAsc: 'Erva’nın puanı: düşükten yükseğe', ratings: 'Puanlamalar', actions: 'İşlemler', animeOne: 'Anime',
@@ -32,10 +34,12 @@ const copy = {
     footerLine: 'EN GÜZEL ŞEYLER, BİRLİKTEYKEN.', footerTitle: 'Bu hikâye', footerEnd: 'devam ediyor.', footerSign: 'SEVGİYLE, İKİMİZ.', top: 'YUKARI ÇIK ↑', languageLabel: 'Dili English yap', themeLabel: 'Açık temaya geç', themeDarkLabel: 'Koyu temaya geç', loginTitle: 'Giriş Yap', loginEmail: 'E-posta', loginPassword: 'Şifre', loginButton: 'Giriş', loginError: 'E-posta veya şifre hatalı.', loginRequired: 'Bu sayfayı görüntülemek için giriş yapmalısınız.', adminTitle: 'Yönetim Paneli', adminWelcome: 'Hoş geldiniz, yönetici.', adminLogout: 'Çıkış Yap', navAdmin: 'Yönetim', adminDeleteConfirm: 'Bu kaydı silmek istediğinize emin misiniz?', adminMemoryTitle: 'Başlık', adminMemoryDate: 'Tarih', adminMemoryImage: 'Görsel', adminMemoryNote: 'Not', adminType: 'Tür', adminStatus: 'Durum', edit: 'Düzenle', delete: 'Sil', cancel: 'İptal', confirmDelete: 'Evet, sil', deleteConfirmTitle: 'Silmek istediğinize emin misiniz?', editMemory: 'Anıyı düzenle', addMemory: 'Yeni anı ekle', editMedia: 'Dizi veya filmi düzenle', aboutHeading: 'Başlığın ilk satırı', aboutHeadingSecond: 'Başlığın ikinci satırı', aboutParagraphOne: 'Birinci paragraf', aboutParagraphTwo: 'İkinci paragraf', chooseImage: 'Kütüphaneden görsel seç', uploadingImage: 'Görsel Cloudinary’ye yükleniyor', imageUploadFailed: 'Görsel yüklenemedi. Sunucu ve Cloudinary bağlantısını kontrol edin.', imageOnly: 'Lütfen bir görsel dosyası seçin.', imageTooLarge: 'Görsel boyutu en fazla 10 MB olabilir.', memoryImagePreview: 'Seçilen görselin önizlemesi', memoryDatePlaceholder: 'Örn. 19 Temmuz 2026', backToHome: 'Ana sayfaya dön',
   },
   en: {
+    previousPhoto: 'Previous photo', nextPhoto: 'Next photo',
     anime: 'Anime', enesRating: "Enes’s rating", ervaRating: "Erva’s rating", unrated: 'Not rated',
     seasonEpisode: 'Season / Episode', notApplicable: 'Not applicable to films',
     mediaNameImage: 'Title / Image',
     memoryWriteDenied: 'Photo could not be saved. Admin write access to the Firestore memories collection is missing. Check the Firebase rules.',
+    uploadServiceUnavailable: 'Image upload is unavailable. Please wait for the site administrator to finish configuring uploads.',
     sortBy: 'Sort by', sortTitleAsc: 'A to Z', sortTitleDesc: 'Z to A',
     sortEnesDesc: 'Enes’s rating: high to low', sortErvaDesc: 'Erva’s rating: high to low',
     sortEnesAsc: 'Enes’s rating: low to high', sortErvaAsc: 'Erva’s rating: low to high', ratings: 'Ratings', actions: 'Actions', animeOne: 'Anime',

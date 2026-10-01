@@ -1,5 +1,5 @@
 import { useEffect, useState, type PointerEvent } from 'react'
-import { ArrowUpRight, Check, Film, LoaderCircle, Tv } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Film, LoaderCircle, Tv } from 'lucide-react'
 import { useLanguage } from '../../lib/i18n'
 import { getDataErrorKey } from '../../lib/dataErrors'
 import { getWatchlist, type WatchItem } from './watchlistService'
@@ -49,6 +49,7 @@ export function WatchlistPreview() {
           <h2 id="watchlist-preview-title">{t('mediaTitle')}<span className="accent">.</span><sup className="archive-count" aria-label={`${items.length} ${t('entries')}`}>{loading || error ? '—' : String(items.length).padStart(2, '0')}</sup></h2>
           <p>{t('eveningsCopy')}</p>
         </div>
+        <a className="text-link archive-browse-link" href={DETAIL_URL} onClick={event => { event.preventDefault(); navigateTo(DETAIL_URL) }}>{t('allMedia')} <ArrowRight size={15} /></a>
       </div>
 
       {loading ? (

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { Trash2, Plus, LoaderCircle, Pencil, X, ImagePlus } from 'lucide-react'
 import { useLanguage } from '../../lib/i18n'
+import { formatMemoryDate } from '../memories/memoryGroups'
 import { collection, getDocs, deleteDoc, doc, addDoc, updateDoc, orderBy, query } from 'firebase/firestore'
-import { db } from '../../lib/firebase'
+import { auth, db } from '../../lib/firebase'
 import { MemoryDateInput } from './MemoryDateInput'
 import { getDataErrorKey } from '../../lib/dataErrors'
 import CloudinaryPhoto from '../../CloudinaryPhoto'
@@ -15,7 +16,7 @@ type MemoryFields = { title: string; date: string; note: string; imageUrl: strin
 const emptyFields: MemoryFields = { title: '', date: '', note: '', imageUrl: '', publicId: '' }
 
 export function AdminMemories() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [memories, setMemories] = useState<Memory[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -63,9 +64,13 @@ export function AdminMemories() {
     setUploading(true)
     setUploadError('')
     try {
-      const signatureResponse = await fetch('/api/uploads/signature')
-      if (!signatureResponse.ok) throw new Error(t('imageUploadFailed'))
-      const signature = await signatureResponse.json() as { cloudName: string; apiKey: string; timestamp: number; folder: string; signature: string }
+      const token = await auth.currentUser?.getIdToken()
+      if (!token) throw new Error(t('memoryWriteDenied'))
+      const signatureResponse = await fetch('/api/uploads/signature', { headers: { Authorization: `Bearer ${token}` } })
+      if (!signatureResponse.headers.get('content-type')?.includes('application/json')) throw new Error(t('uploadServiceUnavailable'))
+      const signature = await signatureResponse.json() as { cloudName: string; apiKey: string; timestamp: number; folder: string; signature: string; error?: string; code?: string }
+      if (!signatureResponse.ok) throw new Error(signature.code === 'UPLOAD_NOT_CONFIGURED' ? t('uploadServiceUnavailable') : signature.error || t('imageUploadFailed'))
+      if (!signature.cloudName || !signature.apiKey || !signature.signature || !signature.timestamp) throw new Error(t('uploadServiceUnavailable'))
       const form = new FormData()
       form.append('file', file)
       form.append('api_key', signature.apiKey)
@@ -127,7 +132,7 @@ export function AdminMemories() {
               {memory.publicId ? <CloudinaryPhoto publicId={memory.publicId} alt={memory.title} width={160} height={160} /> : memory.imageUrl ? <img src={memory.imageUrl} alt={memory.title} loading="lazy" /> : <span className="admin-memory-no-image"><ImagePlus size={20} /></span>}
               <div><h3>{memory.title}</h3></div>
             </a></div>
-            <div role="cell" data-label={t('adminMemoryDate')}><div className="media-cell-value admin-memory-date">{memory.date || '—'}</div></div>
+            <div role="cell" data-label={t('adminMemoryDate')}><div className="media-cell-value admin-memory-date">{formatMemoryDate(memory.date, language) || '—'}</div></div>
             <div className="media-actions-cell" role="cell" data-label={t('actions')}><div className="media-cell-value admin-row-actions"><button className="admin-edit-btn" aria-label={`${t('edit')}: ${memory.title}`} onClick={() => openEdit(memory)}><Pencil size={14} /></button><button className="admin-delete-btn" aria-label={`${t('delete')}: ${memory.title}`} onClick={() => setDeleting(memory)}><Trash2 size={14} /></button></div></div>
           </div>
         ))}

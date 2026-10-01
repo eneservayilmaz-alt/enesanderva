@@ -6,8 +6,10 @@ import { applicationDefault, cert, getApps, initializeApp } from 'firebase-admin
 import { getFirestore } from 'firebase-admin/firestore'
 import { apiErrorHandler } from './middleware/apiErrorHandler.js'
 import { fileURLToPath } from 'node:url'
+import uploadSignature from '../../client/api/uploads/signature.js'
 
 dotenv.config({ path: fileURLToPath(new URL('../../.env', import.meta.url)) })
+dotenv.config({ path: fileURLToPath(new URL('../../client/.env', import.meta.url)) })
 
 const app = express()
 const port = Number(process.env.PORT || 4000)
@@ -34,14 +36,7 @@ function getDatabase() {
 
 app.get('/api/health', (_request, response) => response.json({ status: 'ok' }))
 
-app.get('/api/uploads/signature', (_request, response) => {
-  const { CLOUDINARY_CLOUD_NAME: cloudName, CLOUDINARY_API_KEY: apiKey, CLOUDINARY_API_SECRET: apiSecret } = process.env
-  if (!cloudName || !apiKey || !apiSecret) return response.status(503).json({ error: 'Cloudinary henüz yapılandırılmadı.' })
-  const timestamp = Math.floor(Date.now() / 1000)
-  const folder = 'bizim-anilarimiz'
-  const signature = cloudinary.utils.api_sign_request({ folder, timestamp }, apiSecret)
-  response.json({ cloudName, apiKey, timestamp, folder, signature })
-})
+app.get('/api/uploads/signature', uploadSignature)
 
 app.get('/api/memories', async (_request, response, next) => {
   try {
