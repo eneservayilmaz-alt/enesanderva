@@ -20,7 +20,7 @@ Cloudinary'den cloud name, API key ve API secret alın. İmzalı yüklemelerde A
 
 ### Vercel yönlendirmeleri
 
-Canlı site: [enesanderva.vercel.app](https://enesanderva.vercel.app/).
+Canlı site: [enesandervanur.vercel.app](https://enesandervanur.vercel.app/).
 
 Vercel Root Directory proje kökü ise kökteki `vercel.json` kullanılır ve yayın çıktısı `client/dist` olur. Root Directory `client` ise `client/vercel.json` kullanılır ve yayın çıktısı `dist` olur. Her ikisi de `npm run build` çalıştırır ve doğrudan açılan `/login`, `/giris`, `/admin` ve alt sayfaları `/index.html` üzerinden React'e iletir. Yapılandırmanın uygulanması için yeni deploy gerekir. Firebase `VITE_FIREBASE_*` ortam değişkenlerini Vercel projesinde tanımlayın. Express `/api` sunucusu bu statik frontend yapılandırmasıyla yayımlanmaz.
 
