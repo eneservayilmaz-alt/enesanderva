@@ -68,7 +68,7 @@ export function AdminWatchlist() {
         await updateDoc(doc(db, 'watchlist', editing.id), values)
         setItems((previous) => previous.map((item) => item.id === editing.id ? { ...item, ...values } : item))
       } else {
-        const record = { ...values, status: 'planned' as const, createdAt: new Date().toISOString() }
+        const record = { ...values, status: 'completed' as const, createdAt: new Date().toISOString() }
         const reference = await addDoc(collection(db, 'watchlist'), record)
         setItems((previous) => [{ id: reference.id, ...record }, ...previous])
       }
@@ -98,7 +98,7 @@ export function AdminWatchlist() {
   }
 
   return <section>
-    <div className="admin-section-header"><h1>{t('navMedia')}<span className="accent">.</span></h1><button className="admin-add-btn" onClick={() => openEditor()}><Plus size={16} /> {t('add')}</button></div>
+    <div className="admin-section-header"><h1>{t('navMedia')}<span className="accent">.</span><sup className="archive-count" aria-label={`${items.length} ${t('entries')}`}>{loading ? '—' : String(items.length).padStart(2, '0')}</sup></h1><button className="admin-add-btn" onClick={() => openEditor()}><Plus size={16} /> {t('add')}</button></div>
     {error && !editorOpen && !deleting && <p className="admin-form-error" role="alert">{error}</p>}
     {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loading')}</p> : items.length === 0 ? <p className="admin-empty">{t('emptyTitle')}</p> : <MediaTable items={sortWatchlist(items)} showKind busy={saving} onStatusChange={cycleStatus} renderActions={(item) => <div className="admin-row-actions"><button className="admin-edit-btn" disabled={saving} aria-label={t('edit')} onClick={() => openEditor(item)}><Pencil size={14} /></button><button className="admin-delete-btn" disabled={saving} aria-label={t('delete')} onClick={() => { setError(''); setDeleting(item) }}><Trash2 size={14} /></button></div>} />}
 

@@ -1,0 +1,6 @@
+.memory-date-input{position:relative;margin:18px 0}
+.memory-date-input label{margin:0 0 8px;display:block}
+.memory-date-input input{width:100%}
+.memory-date-options{position:absolute;top:100%;left:0;right:0;z-index:5;max-height:170px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--rose);background:var(--ink);color:var(--paper);box-shadow:0 8px 24px #0004}
+.memory-date-options [role=option]{padding:12px 14px;min-height:44px;cursor:pointer;font-size:13px}
+.memory-date-options [role=option]:is(:hover,.active){background:var(--rose);color:#0c0c0b}

@@ -4,3 +4,46 @@
 .memory-photo:has(.memory-cloudinary-image) .photo-index,.memory-photo:has(.memory-cloudinary-image) .photo-heart,.memory-photo:has(.memory-cloudinary-image) .photo-title{z-index:2}
 .memory-card-link{display:block;color:inherit}
 .memory-image-placeholder{position:absolute;inset:0;background:var(--ink);border:1px solid var(--rose)}
+
+.memory-day-card{min-width:0}
+.home-memory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.home-memory-grid .memory-day-card:nth-child(n){margin-top:0}
+.home-memory-grid .memory-day-card .memory-day-stack{height:auto;aspect-ratio:4/5}
+.memory-day-stack{position:relative;isolation:isolate;height:clamp(230px,25vw,350px);margin:var(--stack-space) var(--stack-space) 0 0}
+.memory-card--large .memory-day-stack{height:clamp(300px,36vw,510px)}
+.memory-day-card .memory-day-stack .memory-leaf{position:absolute;inset:0;width:100%;height:100%;padding:0;border:1px solid color-mix(in srgb,var(--paper) 35%,transparent);background:var(--ink);color:var(--paper);text-align:left;z-index:var(--leaf-order);transform:translate(var(--leaf-offset),calc(-1 * var(--leaf-offset))) rotate(var(--leaf-angle));transform-origin:center;transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s;box-shadow:0 4px 18px #0003;cursor:zoom-in}
+.memory-day-card .memory-day-stack .memory-leaf:is(:hover,:focus-visible){z-index:100;transform:translate(calc(var(--leaf-offset) + 14px),calc(-1 * var(--leaf-offset) - 14px)) rotate(var(--leaf-angle));box-shadow:0 14px 28px #0005;outline:2px solid var(--rose);outline-offset:3px}
+.memory-day-count{display:flex;gap:12px;align-items:center}
+.memory-card-button{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:zoom-in}
+.memory-card-button:focus-visible{outline:2px solid var(--rose);outline-offset:4px}
+.archive-page .archive-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 18px;align-items:start}
+.archive-page .archive-grid .memory-card{margin-top:0;min-width:0}
+.archive-page .archive-grid .memory-card:nth-child(n) .memory-photo{width:100%;height:auto;aspect-ratio:1;transform:none}
+.archive-page .archive-grid .photo-title{left:12px;right:12px;bottom:12px;font-size:clamp(14px,1.4vw,21px);overflow-wrap:anywhere}
+.archive-page .archive-grid .photo-index,.archive-page .archive-grid .photo-heart{top:12px}
+.archive-page .archive-grid .photo-index{left:12px}
+.archive-page .archive-grid .photo-heart{right:12px}
+.archive-page .archive-grid .memory-caption{font-size:10px;gap:6px;line-height:1.5}
+.memory-lightbox{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:56px 5vw 28px;border:0;background:#0c0c0bf2;color:#f1efe7}
+.memory-lightbox::backdrop{background:#000b}
+.memory-lightbox figure{height:100%;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none}
+.memory-lightbox figure img{display:block;max-width:100%;max-height:calc(100% - 70px);width:auto;height:auto;object-fit:contain;pointer-events:auto}
+.memory-lightbox figcaption{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;line-height:1.4}
+.memory-lightbox figcaption span{font:11px var(--mono);color:var(--rose)}
+.memory-lightbox-close{position:absolute;right:20px;top:14px;width:44px;height:44px;display:grid;place-items:center;border:1px solid #f1efe74d;border-radius:50%;background:#0c0c0b;color:#f1efe7}
+@media(max-width:1100px){.archive-page .archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){
+  .home-memory-grid{gap:12px}
+  .home-memory-grid .memory-day-card .photo-title{font-size:12px;left:7px;bottom:8px}
+  .home-memory-grid .memory-day-card .photo-index{top:7px;left:7px;font-size:8px}
+  .home-memory-grid .memory-day-card .photo-heart{top:7px;right:7px}
+  .home-memory-grid .memory-day-card .photo-heart svg{width:12px;height:12px}
+  .home-memory-grid .memory-caption{font-size:8px}
+  .archive-page .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px}
+  .archive-page .archive-grid .photo-title{font-size:14px;left:9px;right:9px;bottom:9px}
+  .archive-page .archive-grid .memory-caption{font-size:9px}
+  .memory-day-stack,.memory-card--large .memory-day-stack{height:clamp(200px,52vw,330px)}
+  .memory-day-card .photo-title{left:12px;bottom:14px;font-size:16px}
+  .memory-day-card .memory-caption{line-height:1.5;gap:8px;flex-wrap:wrap}
+}
+@media(hover:none){.memory-day-card .memory-day-stack .memory-leaf:hover{transform:translate(var(--leaf-offset),calc(-1 * var(--leaf-offset))) rotate(var(--leaf-angle))}}

@@ -67,7 +67,12 @@ body{transition:background-color .42s ease,color .42s ease}
 .hero-bottom>.round-link:hover{transform:translate(-50%,3px)}
 .memory-photo{color:var(--paper)}
 .archive-page,.about-page{min-height:calc(100svh - 84px);background:var(--ink);color:var(--paper)}
-.archive-heading{padding-top:clamp(80px,9vw,150px);padding-bottom:clamp(50px,6vw,90px)}
+.archive-page{min-height:calc(100svh - 84px);display:flex;flex-direction:column;padding-top:35px;padding-bottom:24px}
+.archive-page .archive-grid,.archive-page .archive-empty{flex-shrink:0;margin-bottom:24px}
+.archive-page .memories-foot{margin-top:auto}
+.archive-page .archive-heading{padding:clamp(32px,8svh,80px) 0 clamp(24px,4svh,48px)}
+.archive-page .archive-heading h1{font-size:clamp(48px,7vw,92px);line-height:.99}
+.archive-page .archive-heading p{margin:20px 0 0;line-height:1.5}
 .archive-heading h1,.about-page h1{font-size:clamp(54px,9vw,124px);font-weight:500;letter-spacing:-.08em;line-height:.96;margin:0}
 .archive-count{display:inline-flex;vertical-align:top;margin:9px 0 0 14px;color:var(--rose);font:11px var(--mono);letter-spacing:.1em}
 .memories-heading-actions{display:flex;align-items:flex-end;gap:30px}
@@ -95,6 +100,8 @@ body{transition:background-color .42s ease,color .42s ease}
   .memories-heading p{font-size:14px}
 }
 @media(max-width:760px){
+  .archive-page{min-height:calc(100svh - 70px);padding-top:28px}
+  .archive-page .archive-heading h1{font-size:clamp(40px,10vw,64px)}
   .header-control{width:38px;height:38px}
   .hero-viewport{min-height:calc(100svh - 70px);padding-top:28px;padding-bottom:34px}
   .hero h1{font-size:clamp(58px,13.5vw,96px);line-height:.94;margin:62px 0 46px;letter-spacing:-.085em}

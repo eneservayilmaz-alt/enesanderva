@@ -3,6 +3,11 @@ import { Trash2, Plus, LoaderCircle, Pencil, X, ImagePlus } from 'lucide-react'
 import { useLanguage } from '../../lib/i18n'
 import { collection, getDocs, deleteDoc, doc, addDoc, updateDoc, orderBy, query } from 'firebase/firestore'
 import { db } from '../../lib/firebase'
+import { MemoryDateInput } from './MemoryDateInput'
+import { getDataErrorKey } from '../../lib/dataErrors'
+import CloudinaryPhoto from '../../CloudinaryPhoto'
+import '../watchlist/media-table.css'
+import './admin-memory-table.css'
 
 type Memory = { id: string; title: string; date: string; note: string; imageUrl: string; publicId: string; createdAt: string }
 type MemoryFields = { title: string; date: string; note: string; imageUrl: string; publicId: string }
@@ -18,15 +23,17 @@ export function AdminMemories() {
   const [editing, setEditing] = useState<Memory | null>(null)
   const [fields, setFields] = useState<MemoryFields>(emptyFields)
   const [uploadError, setUploadError] = useState('')
+  const [loadError, setLoadError] = useState('')
   const [deleting, setDeleting] = useState<Memory | null>(null)
   const fileInput = useRef<HTMLInputElement>(null)
 
   const load = async () => {
     setLoading(true)
+    setLoadError('')
     try {
       const snap = await getDocs(query(collection(db, 'memories'), orderBy('createdAt', 'desc')))
       setMemories(snap.docs.map((entry) => ({ id: entry.id, ...entry.data() } as Memory)))
-    } finally { setLoading(false) }
+    } catch (error) { setLoadError(t(getDataErrorKey(error))) } finally { setLoading(false) }
   }
 
   useEffect(() => { void load() }, [])
@@ -88,7 +95,7 @@ export function AdminMemories() {
       }
       setEditorOpen(false)
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : t('saveError'))
+      setUploadError(getDataErrorKey(error) === 'dataPermissionDenied' ? t('memoryWriteDenied') : error instanceof Error ? error.message : t('saveError'))
     } finally { setSaving(false) }
   }
 
@@ -108,16 +115,19 @@ export function AdminMemories() {
         <button className="admin-add-btn" onClick={openAdd}><Plus size={16} /> {t('add')}</button>
       </div>
 
+      {loadError && <p className="admin-form-error" role="alert">{loadError}</p>}
       {loading ? <p className="admin-loading"><LoaderCircle className="spin" size={18} /> {t('loadingMemories')}</p> :
       memories.length === 0 ? <p className="admin-empty">{t('emptyMemories')}</p> :
-      <div className="admin-table">
-        <div className="admin-table-head"><span>#</span><span>{t('adminMemoryTitle')}</span><span>{t('adminMemoryDate')}</span><span></span></div>
-        {memories.map((memory, index) => (
-          <div className="admin-table-row" key={memory.id}>
-            <span className="admin-row-num">{String(index + 1).padStart(2, '0')}</span>
-            <span className="admin-row-title">{memory.title}</span>
-            <span className="admin-row-date">{memory.date || '—'}</span>
-            <div className="admin-row-actions"><button className="admin-edit-btn" aria-label={t('edit')} onClick={() => openEdit(memory)}><Pencil size={14} /></button><button className="admin-delete-btn" aria-label={t('delete')} onClick={() => setDeleting(memory)}><Trash2 size={14} /></button></div>
+      <div className="media-table has-actions admin-memory-table" role="table" aria-label={t('navMemories')}>
+        <div className="media-table-header media-table-grid" role="row"><span role="columnheader">{t('mediaNameImage')}</span><span role="columnheader">{t('adminMemoryDate')}</span><span role="columnheader">{t('actions')}</span></div>
+        {memories.map((memory) => (
+          <div className="media-table-row media-table-grid" role="row" key={memory.id}>
+            <div className="media-title-cell" role="cell" data-label={t('mediaNameImage')}><div className="media-cell-value media-title-content">
+              {memory.publicId ? <CloudinaryPhoto publicId={memory.publicId} alt={memory.title} width={160} height={160} /> : memory.imageUrl ? <img src={memory.imageUrl} alt={memory.title} loading="lazy" /> : <span className="admin-memory-no-image"><ImagePlus size={20} /></span>}
+              <div><h3>{memory.title}</h3></div>
+            </div></div>
+            <div role="cell" data-label={t('adminMemoryDate')}><div className="media-cell-value admin-memory-date">{memory.date || '—'}</div></div>
+            <div className="media-actions-cell" role="cell" data-label={t('actions')}><div className="media-cell-value admin-row-actions"><button className="admin-edit-btn" aria-label={`${t('edit')}: ${memory.title}`} onClick={() => openEdit(memory)}><Pencil size={14} /></button><button className="admin-delete-btn" aria-label={`${t('delete')}: ${memory.title}`} onClick={() => setDeleting(memory)}><Trash2 size={14} /></button></div></div>
           </div>
         ))}
       </div>}
@@ -134,7 +144,7 @@ export function AdminMemories() {
             <button className="admin-image-picker" type="button" onClick={() => fileInput.current?.click()} disabled={uploading}><ImagePlus size={16} />{uploading ? <><LoaderCircle className="spin" size={15} /> {t('uploadingImage')}</> : t('chooseImage')}</button>
           </>}
           <label><span>{t('adminMemoryTitle')}</span><input value={fields.title} onChange={(event) => setFields({ ...fields, title: event.target.value })} /></label>
-          <label><span>{t('adminMemoryDate')}</span><input value={fields.date} onChange={(event) => setFields({ ...fields, date: event.target.value })} placeholder={t('memoryDatePlaceholder')} /></label>
+          <MemoryDateInput label={t('adminMemoryDate')} value={fields.date} onChange={date => setFields(current => ({ ...current, date }))} dates={memories.map(memory => memory.date)} placeholder={t('memoryDatePlaceholder')} />
           <label><span>{t('adminMemoryNote')}</span><textarea rows={3} value={fields.note} onChange={(event) => setFields({ ...fields, note: event.target.value })} /></label>
           {uploadError && <p className="admin-form-error" role="alert">{uploadError}</p>}
           <div className="admin-modal-actions"><button className="admin-cancel-btn" onClick={() => setEditorOpen(false)} disabled={uploading || saving}>{t('cancel')}</button><button className="admin-save-btn" onClick={handleSave} disabled={saving || uploading || !fields.title.trim() || !fields.imageUrl.trim()}>{saving ? '...' : editing ? t('save') : t('add')}</button></div>

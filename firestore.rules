@@ -1,10 +1,3 @@
-# Firestore admin izinleri
-
-Fotoğraf ekleme/düzenleme isteği artık memories için admin yazma izni gerektiriyor. Önceki `allow write: if false` kuralı bu işlemi engelliyordu. Canlı kurallar okunmadığı için mevcut sunucu durumu doğrulanmadı.
-
-Firebase Console → Firestore Database → Rules bölümünde **tam dosyayı** kullanın. Kural yalnızca `enes@erva.com` hesabına yazma izni verir. watchlist kuralları korunmuştur. Başka koleksiyon kurallarınız varsa onları da koruyun. Yerel dosyayı değiştirmek kuralları Firebase’e yayımlamaz.
-
-```javascript
 rules_version = '2';
 
 service cloud.firestore {
@@ -62,6 +55,3 @@ service cloud.firestore {
     }
   }
 }
-```
-
-Kaynak: https://firebase.google.com/docs/firestore/security/rules-conditions

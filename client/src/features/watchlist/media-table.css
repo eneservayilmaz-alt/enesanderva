@@ -1,0 +1,55 @@
+.media-table{container-type:inline-size;container-name:media-table;border-top:1px solid var(--line);--media-columns:minmax(180px,1fr) minmax(230px,1fr) 120px}
+.media-table.has-kind{--media-columns:60px minmax(180px,1fr) minmax(230px,1fr) 120px}
+.media-table.has-progress{--media-columns:minmax(180px,1fr) minmax(230px,1fr) 95px 120px}
+.media-table.has-kind.has-progress{--media-columns:60px minmax(180px,1fr) minmax(230px,1fr) 95px 120px}
+.media-table.has-actions{--media-columns:55px minmax(160px,1fr) minmax(230px,1fr) 120px 72px}
+.media-table.has-actions.has-progress{--media-columns:55px minmax(160px,1fr) minmax(230px,1fr) 95px 120px 72px}
+.media-table-grid{display:grid;grid-template-columns:var(--media-columns);gap:16px;align-items:center}
+.media-table-header{padding:14px 0;border-bottom:1px solid var(--line);font:9px var(--mono);letter-spacing:.08em;opacity:.65}
+.media-table-row{padding:22px 0;border-bottom:1px solid var(--line)}
+.media-table-row>[role=cell],.media-cell-value{min-width:0;max-width:100%}
+.media-title-content{display:flex;align-items:center;gap:16px}
+.media-title-content>div{min-width:0}
+.media-title-cell img{width:64px;height:94px;flex-shrink:0;object-fit:contain}
+.media-title-cell h3{display:flex;align-items:baseline;gap:9px;margin:0;font:500 23px var(--serif);overflow-wrap:anywhere}
+.media-title-cell h3 svg{flex-shrink:0;color:var(--rose)}
+.media-table.has-actions .media-title-cell img{width:52px;height:78px}
+.media-table.has-actions .media-title-cell h3{font-size:19px}
+.media-progress-values{display:flex;flex-direction:column;gap:10px;font:10px var(--mono)}
+.media-progress-values strong{color:var(--rose);font-weight:500}
+.media-type-cell{font:10px var(--mono)}
+.media-ratings-cell .personal-rating{gap:7px;margin:9px 0;font-size:11px}
+.media-ratings-cell .personal-rating>span{min-width:100px}
+.media-ratings-cell .rating-stars{gap:3px}
+.media-ratings-cell .rating-stars svg{width:15px;height:15px}
+.media-status-badge{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:35px;padding:9px;border:1px solid var(--line);background:transparent;color:var(--paper);font:9px var(--mono);letter-spacing:.04em;line-height:1.5}
+.media-status-badge.admin-status--completed{border-color:var(--rose);color:var(--rose)}
+.media-status-badge:disabled{cursor:default;opacity:1}
+.media-actions-cell .admin-row-actions{justify-content:flex-end;gap:10px}
+.media-actions-cell button{flex-shrink:0;min-width:32px;min-height:32px}
+@container media-table (max-width:850px){
+  .media-table.has-actions .media-table-header{display:none}
+  .media-table.has-actions .media-table-row{grid-template-columns:minmax(0,1fr);gap:0;padding:16px 0}
+  .media-table.has-actions .media-table-row>[role=cell]{display:grid;grid-template-columns:clamp(76px,25%,130px) minmax(0,1fr);align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,var(--paper) 8%,transparent)}
+  .media-table.has-actions .media-table-row>[data-label]::before{content:attr(data-label);font:10px var(--mono);line-height:1.5;opacity:.6}
+}
+@container media-table (max-width:780px){
+  .media-table-header{display:none}
+  .media-table-row{grid-template-columns:minmax(0,1fr);gap:0;padding:16px 0}
+  .media-table-row>[role=cell]{display:grid;grid-template-columns:clamp(76px,25%,130px) minmax(0,1fr);align-items:center;gap:14px;width:100%;padding:13px 0;border-bottom:1px solid color-mix(in srgb,var(--paper) 8%,transparent)}
+  .media-table-row>[data-label]::before{content:attr(data-label);font:10px var(--mono);letter-spacing:.03em;line-height:1.5;opacity:.6}
+  .media-table-row>.media-ratings-cell{align-items:start}
+  .media-table .media-title-content{gap:10px}
+  .media-table .media-title-cell img{width:42px;height:64px}
+  .media-table .media-title-cell h3{font-size:18px;line-height:1.3;gap:6px}
+  .media-table .media-title-cell h3 svg{width:12px}
+  .media-ratings-cell .personal-rating{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px;margin:0 0 14px}
+  .media-ratings-cell .personal-rating>span{grid-column:1/-1;min-width:0;font-size:10px}
+}
+@container media-table (max-width:850px){
+  .media-table-row>[role=cell]:last-child{border-bottom:0}
+  .media-ratings-cell .personal-rating:last-child{margin-bottom:0}
+  .media-table .media-status-badge{width:auto;max-width:100%;min-width:115px;white-space:normal}
+  .media-actions-cell .admin-row-actions{justify-content:flex-start;gap:14px}
+  .media-actions-cell button{min-width:40px;min-height:40px}
+}

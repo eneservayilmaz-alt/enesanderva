@@ -11,14 +11,15 @@ type CloudinaryPhotoProps = {
   width?: number
   height?: number
   className?: string
+  uncropped?: boolean
 }
 
-function CloudinaryPhoto({ publicId, alt, width = 900, height = 700, className }: CloudinaryPhotoProps) {
+function CloudinaryPhoto({ publicId, alt, width = 900, height = 700, className, uncropped = false }: CloudinaryPhotoProps) {
   const image = cloudinary
     .image(publicId)
     .format('auto')
     .quality('auto')
-    .resize(auto().gravity(autoGravity()).width(width).height(height))
+  if (!uncropped) image.resize(auto().gravity(autoGravity()).width(width).height(height))
 
   return <AdvancedImage cldImg={image} alt={alt} className={className} />
 }

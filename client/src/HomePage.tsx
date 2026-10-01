@@ -4,7 +4,8 @@ import { ArrowDown, ArrowRight, Heart, Menu, Moon, Sun, X } from 'lucide-react'
 import SeriesAndFilms from './SeriesAndFilms'
 import { useLanguage } from './lib/i18n'
 import { MemoryArchivePage } from './features/memories/MemoryArchivePage'
-import { MemoryCard } from './features/memories/MemoryCard'
+import { MemoryDayStack } from './features/memories/MemoryDayStack'
+import { groupMemoriesByDate } from './features/memories/memoryGroups'
 import { useMemories } from './features/memories/useMemories'
 import { WatchlistPreview } from './features/watchlist/WatchlistPreview'
 import { SiteFooter } from './components/layout/SiteFooter'
@@ -127,8 +128,8 @@ function HomePage() {
         <motion.section className="memories section-pad" id="anilarimiz" variants={sectionMotion}>
           <div className="section-kicker"><span>{t('navMemories').toLocaleUpperCase(language === 'tr' ? 'tr-TR' : 'en-US')}</span><span>{t('memoryAside')}</span></div>
           <div className="memories-heading flex items-end justify-between max-md:block"><h2>{t('memoriesTitle')}<span className="accent">.</span><sup className="archive-count">{String(memoryCount).padStart(2, '0')}</sup></h2><div className="memories-heading-actions"><p>{t('memoryNote')}</p><a className="text-link" href="/anilarimiz" onClick={(e) => go(e, '/anilarimiz')}>{t('allMemories')} <ArrowRight size={15} /></a></div></div>
-          {memoriesLoading ? <div className="archive-empty home-memory-empty">{t('loadingMemories')}</div> : memoriesError ? <div className="archive-empty home-memory-empty" role="status">{t(getDataErrorKey(memoriesError))}</div> : savedMemories.length > 0 ? <div className="memory-grid grid grid-cols-[1.3fr_1fr_1fr] gap-[18px] items-start max-md:grid-cols-2 max-md:gap-[10px]">
-            {savedMemories.slice(0, 3).map((memory, index) => <MemoryCard key={memory.id} memory={memory} index={index} linkToArchive />)}
+          {memoriesLoading ? <div className="archive-empty home-memory-empty">{t('loadingMemories')}</div> : memoriesError ? <div className="archive-empty home-memory-empty" role="status">{t(getDataErrorKey(memoriesError))}</div> : savedMemories.length > 0 ? <div className="memory-grid home-memory-grid">
+            {groupMemoriesByDate(savedMemories).slice(0, 3).map((memories, index) => <MemoryDayStack key={memories[0].id} memories={memories} index={index} />)}
           </div> : <div className="archive-empty home-memory-empty">{t('emptyMemories')}</div>}
           <div className="memories-foot"><span>{t('moreMemories')}</span><span>{String(memoryCount).padStart(2, '0')} {t('entries')}</span></div>
         </motion.section>

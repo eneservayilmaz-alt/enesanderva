@@ -1,0 +1,7 @@
+.media-table.admin-memory-table.has-actions{--media-columns:minmax(0,1fr) minmax(140px,.4fr) 90px}
+.media-table.admin-memory-table.has-actions .media-title-cell img{object-fit:cover;aspect-ratio:1;width:64px;height:64px}
+.admin-memory-date{font:11px var(--mono);line-height:1.6;overflow-wrap:anywhere}
+.admin-memory-no-image{display:grid;place-items:center;width:64px;height:64px;flex-shrink:0;border:1px solid var(--line);color:var(--rose)}
+@container media-table (max-width:850px){
+  .media-table.admin-memory-table.has-actions .media-title-cell img,.admin-memory-no-image{width:48px;height:48px}
+}

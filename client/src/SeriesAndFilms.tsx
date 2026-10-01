@@ -37,7 +37,7 @@ function SeriesAndFilms() {
 
   return <section className="watchlist section-pad" id="dizi-filmler">
     <div className="watchlist-heading">
-      <div><span className="watchlist-eyebrow">{t('mediaEyebrow')}</span><h2>{t('mediaTitle')}<span className="accent">.</span></h2></div>
+      <div><span className="watchlist-eyebrow">{t('mediaEyebrow')}</span><h2>{t('mediaTitle')}<span className="accent">.</span><sup className="archive-count" aria-label={`${items.length} ${t('entries')}`}>{loading || error ? '—' : String(items.length).padStart(2, '0')}</sup></h2></div>
       <div className="watchlist-sort-desktop"><WatchlistSortControl value={sort} onChange={setSort} /></div>
     </div>
     <div className="watchlist-layout grid grid-cols-1 gap-10 md:grid-cols-[220px_minmax(0,1fr)] md:gap-14">
