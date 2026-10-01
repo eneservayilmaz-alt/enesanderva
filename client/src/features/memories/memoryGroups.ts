@@ -23,6 +23,30 @@ export function memoryDateKey(date: string): string {
   return value
 }
 
+function memoryDateValue(key: string): number | null {
+  const parts = key.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+  if (!parts) return null
+  const [, year, month, day] = parts.map(Number)
+  const value = Date.UTC(year, month - 1, day)
+  const parsed = new Date(value)
+  return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day
+    ? value
+    : null
+}
+
+export function sortMemoriesByDateDescending(memories: Memory[]): Memory[] {
+  return [...memories].sort((a, b) => {
+    const aDate = memoryDateValue(memoryDateKey(a.date))
+    const bDate = memoryDateValue(memoryDateKey(b.date))
+    if (aDate !== bDate) {
+      if (aDate === null) return 1
+      if (bDate === null) return -1
+      return bDate - aDate
+    }
+    return (a.createdAt ?? 0) - (b.createdAt ?? 0) || a.id.localeCompare(b.id)
+  })
+}
+
 export function groupMemoriesByDate(memories: Memory[]): Memory[][] {
   const groups = new Map<string, Memory[]>()
   for (const memory of memories) {
@@ -31,8 +55,16 @@ export function groupMemoriesByDate(memories: Memory[]): Memory[][] {
     group.push(memory)
     groups.set(key, group)
   }
-  // The oldest addition is leaf 01, which the stack places in front.
-  return Array.from(groups.values(), (group) => group.sort((a, b) =>
-    (a.createdAt ?? 0) - (b.createdAt ?? 0) || a.id.localeCompare(b.id),
-  ))
+  // Show the newest date group first; within each stack, leaf 01 remains the oldest addition.
+  return Array.from(groups.entries())
+    .map(([key, group]) => ({ key, group: group.sort((a, b) =>
+      (a.createdAt ?? 0) - (b.createdAt ?? 0) || a.id.localeCompare(b.id),
+    ) }))
+    .sort((a, b) => {
+      const aDate = memoryDateValue(a.key)
+      const bDate = memoryDateValue(b.key)
+      if (aDate === null || bDate === null) return aDate === bDate ? 0 : aDate === null ? 1 : -1
+      return bDate - aDate
+    })
+    .map(({ group }) => group)
 }
