@@ -55,6 +55,7 @@ function SeriesAndFilms() {
         {loading ? <div className="watchlist-empty"><LoaderCircle className="spin" size={20} /><span>{t('loading')}</span></div> : error && shownItems.length === 0 ? null : shownItems.length === 0 ? <div className="watchlist-empty"><Clapperboard size={23} /><strong>{t('emptyTitle')}</strong><span>{t('emptyCopy')}</span></div> : <MediaTable items={shownItems} showKind={filter === 'all'} />}
       </div>
     </div>
+    <div className="memories-foot"><span>{t('moreMemories')}</span><span>{loading || error ? '—' : String(items.length).padStart(2, '0')} {t('entries')}</span></div>
   </section>
 }
 
