@@ -89,6 +89,7 @@ export function WatchlistPreview() {
           ))}
         </div>
       )}
+      <div className="memories-foot"><span>{t('moreMemories')}</span><span>{loading || error ? '—' : String(items.length).padStart(2, '0')} {t('entries')}</span></div>
     </section>
   )
 }
